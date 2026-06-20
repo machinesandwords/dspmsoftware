@@ -54,7 +54,7 @@
     <div class="nav-section">
       <a href="/subscribe/" class="nav-item depth-0 nav-subscribe">Subscribe &rarr;</a>
     </div>
-  ';
+  `;
 
   const container = document.getElementById('sidebar-nav');
   if (container) {
