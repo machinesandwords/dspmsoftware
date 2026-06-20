@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Architecture Fit Tool | DSPM Software</title>
+  <meta name="description" content="Four questions about your data environment. One recommended DSPM architecture. The deployment model decision before the vendor shortlist.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/architecture-fit/">
+
+  <meta property="og:title" content="DSPM Architecture Fit Tool | DSPM Software">
+  <meta property="og:description" content="Four questions about your environment. Recommended DSPM approach and rationale. No download required.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/architecture-fit/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://dspmsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Architecture Fit", "item": "https://dspmsoftware.com/tools/architecture-fit/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .fit-tool { max-width:640px; }
+    .fit-question { margin-bottom:28px; }
+    .fit-q-label { font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--mid); margin-bottom:8px; display:block; }
+    .fit-q-text { font-size:var(--body); font-weight:700; color:var(--charcoal); margin-bottom:14px; line-height:1.4; }
+    .fit-options { display:flex; flex-direction:column; gap:8px; }
+    .fit-option { display:flex; align-items:flex-start; gap:12px; padding:12px 14px; border:var(--hairline); cursor:pointer; background:var(--surface); transition:background 0.1s; }
+    .fit-option:hover { background:var(--accent-pale); }
+    .fit-option.selected { border-color:var(--accent); background:var(--accent-pale); }
+    .fit-option input[type=radio] { margin-top:3px; accent-color:var(--accent); flex-shrink:0; }
+    .fit-option-body { flex:1; }
+    .fit-option-label { font-size:var(--small); font-weight:700; color:var(--charcoal); }
+    .fit-option-desc { font-size:11px; color:var(--mid); margin-top:2px; line-height:1.5; }
+    .fit-submit { margin-top:8px; }
+    .fit-submit button { font-family:inherit; font-size:var(--small); font-weight:700; background:var(--accent); color:#fff; border:none; padding:12px 24px; cursor:pointer; letter-spacing:0.04em; }
+    .fit-submit button:hover { background:var(--accent-dim); }
+    .fit-submit button:disabled { background:var(--faint); cursor:default; }
+
+    .fit-result { display:none; border:2px solid var(--accent); padding:24px; margin-bottom:32px; }
+    .fit-result.visible { display:block; }
+    .fit-result-label { font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:block; }
+    .fit-result-heading { font-size:18px; font-weight:700; color:var(--charcoal); margin-bottom:12px; line-height:1.3; }
+    .fit-result-body { font-size:var(--small); color:var(--mid); line-height:1.65; }
+    .fit-result-body p { margin-bottom:10px; }
+    .fit-result-body p:last-child { margin-bottom:0; }
+    .fit-result-links { margin-top:16px; font-size:var(--small); }
+    .fit-restart { margin-top:20px; }
+    .fit-restart button { font-family:inherit; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; background:none; border:var(--hairline); color:var(--mid); padding:8px 16px; cursor:pointer; }
+    .fit-restart button:hover { color:var(--charcoal); border-color:var(--accent); }
+
+    .fit-progress { display:flex; gap:6px; margin-bottom:28px; }
+    .fit-progress-dot { width:24px; height:4px; background:var(--border); }
+    .fit-progress-dot.active { background:var(--accent); }
+    .fit-progress-dot.done { background:var(--accent-dim); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Architecture Fit</span>
+        </div>
+
+        <span class="page-label">Tool &mdash; Decision Aid</span>
+        <h1>DSPM Architecture Fit</h1>
+
+        <p class="section-intro">Four questions about your environment. The recommended architecture and a summary of why. No account required.</p>
+
+        <div class="fit-tool" id="fit-tool">
+
+          <div class="fit-progress" id="fit-progress">
+            <div class="fit-progress-dot active" id="dot-0"></div>
+            <div class="fit-progress-dot" id="dot-1"></div>
+            <div class="fit-progress-dot" id="dot-2"></div>
+            <div class="fit-progress-dot" id="dot-3"></div>
+          </div>
+
+          <form id="fit-form">
+
+            <div class="fit-question" id="q0">
+              <span class="fit-q-label">Question 1 of 4</span>
+              <div class="fit-q-text">Where does the majority of your sensitive data estate live?</div>
+              <div class="fit-options">
+                <label class="fit-option" id="opt-q0-a">
+                  <input type="radio" name="q0" value="cloud-native">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Primarily cloud and SaaS</div>
+                    <div class="fit-option-desc">AWS, Azure, GCP, Snowflake, Salesforce, Microsoft 365 — data is almost entirely in cloud infrastructure and SaaS applications</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q0-b">
+                  <input type="radio" name="q0" value="hybrid">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Significant mix of cloud and on-premises</div>
+                    <div class="fit-option-desc">Cloud environments alongside Windows file servers, NAS, SharePoint on-premises, or on-premises databases that contain sensitive data</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q0-c">
+                  <input type="radio" name="q0" value="on-prem-heavy">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Primarily on-premises</div>
+                    <div class="fit-option-desc">The majority of sensitive data is in on-premises systems: file servers, NAS, legacy databases, mainframes</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="fit-question" id="q1" style="display:none;">
+              <span class="fit-q-label">Question 2 of 4</span>
+              <div class="fit-q-text">What is the primary threat scenario driving this evaluation?</div>
+              <div class="fit-options">
+                <label class="fit-option" id="opt-q1-a">
+                  <input type="radio" name="q1" value="exposure">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Data exposure and misconfiguration</div>
+                    <div class="fit-option-desc">Finding sensitive data in overly permissive, publicly accessible, or ungoverned locations — before an incident occurs</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q1-b">
+                  <input type="radio" name="q1" value="behavioral">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Behavioral threat detection</div>
+                    <div class="fit-option-desc">Detecting anomalous access patterns, insider threat, ransomware staging, or compromised credentials acting on sensitive data in real-time</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q1-c">
+                  <input type="radio" name="q1" value="compliance">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Compliance and privacy operations</div>
+                    <div class="fit-option-desc">Meeting regulatory requirements, supporting DSAR workflows, producing audit evidence, or managing a formal data governance program</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="fit-question" id="q2" style="display:none;">
+              <span class="fit-q-label">Question 3 of 4</span>
+              <div class="fit-q-text">Is there an existing CNAPP (like Wiz or Prisma Cloud) already deployed?</div>
+              <div class="fit-options">
+                <label class="fit-option" id="opt-q2-a">
+                  <input type="radio" name="q2" value="yes-wiz">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Yes — Wiz is the primary CNAPP</div>
+                    <div class="fit-option-desc">The organization is already a Wiz customer; Wiz is the main cloud security platform</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q2-b">
+                  <input type="radio" name="q2" value="yes-other">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Yes — another CNAPP is deployed</div>
+                    <div class="fit-option-desc">Prisma Cloud, Orca, SentinelOne, or another CNAPP is in use; DSPM is a separate evaluation</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q2-c">
+                  <input type="radio" name="q2" value="no">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">No CNAPP is deployed</div>
+                    <div class="fit-option-desc">DSPM is being evaluated independently; no existing CNAPP integration to consider</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="fit-question" id="q3" style="display:none;">
+              <span class="fit-q-label">Question 4 of 4</span>
+              <div class="fit-q-text">What is the team's capacity to manage an agent or collector deployment?</div>
+              <div class="fit-options">
+                <label class="fit-option" id="opt-q3-a">
+                  <input type="radio" name="q3" value="low">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Low — prefer minimal deployment overhead</div>
+                    <div class="fit-option-desc">No capacity for agent lifecycle management; need a platform that connects without deploying software on managed systems</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q3-b">
+                  <input type="radio" name="q3" value="moderate">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">Moderate — some deployment overhead is acceptable</div>
+                    <div class="fit-option-desc">The team can manage a limited collector deployment if the coverage benefits justify it</div>
+                  </div>
+                </label>
+                <label class="fit-option" id="opt-q3-c">
+                  <input type="radio" name="q3" value="high">
+                  <div class="fit-option-body">
+                    <div class="fit-option-label">High — full agent deployment is feasible</div>
+                    <div class="fit-option-desc">Infrastructure operations team can deploy and manage collectors across the environment; this is not a constraint</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="fit-submit">
+              <button type="button" id="fit-btn" disabled>See recommendation &rarr;</button>
+            </div>
+
+          </form>
+
+          <div class="fit-result" id="fit-result">
+            <span class="fit-result-label">Recommended approach</span>
+            <div class="fit-result-heading" id="result-heading"></div>
+            <div class="fit-result-body" id="result-body"></div>
+            <div class="fit-result-links" id="result-links"></div>
+            <div class="fit-restart">
+              <button type="button" id="fit-restart">Start over</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="newsletter-block">
+          <span class="page-label">The Independent Defender</span>
+          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button">Subscribe free</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function() {
+    var answers = {};
+    var currentQ = 0;
+    var totalQ = 4;
+
+    function updateProgress() {
+      for (var i = 0; i < totalQ; i++) {
+        var dot = document.getElementById('dot-' + i);
+        if (i < currentQ) { dot.className = 'fit-progress-dot done'; }
+        else if (i === currentQ) { dot.className = 'fit-progress-dot active'; }
+        else { dot.className = 'fit-progress-dot'; }
+      }
+    }
+
+    function showQuestion(idx) {
+      for (var i = 0; i < totalQ; i++) {
+        document.getElementById('q' + i).style.display = (i === idx) ? '' : 'none';
+      }
+    }
+
+    document.getElementById('fit-form').addEventListener('change', function(e) {
+      if (!e.target.name) return;
+      var qNum = parseInt(e.target.name.replace('q',''));
+      answers[e.target.name] = e.target.value;
+
+      // highlight selected
+      var opts = document.querySelectorAll('#q' + qNum + ' .fit-option');
+      opts.forEach(function(o){ o.classList.remove('selected'); });
+      e.target.closest('.fit-option').classList.add('selected');
+
+      if (qNum < totalQ - 1) {
+        // advance to next question after brief pause
+        setTimeout(function() {
+          currentQ = qNum + 1;
+          showQuestion(currentQ);
+          updateProgress();
+          // if last question, check if answered
+          checkButton();
+        }, 220);
+      } else {
+        checkButton();
+      }
+    });
+
+    function checkButton() {
+      var allAnswered = true;
+      for (var i = 0; i < totalQ; i++) {
+        if (!answers['q' + i]) { allAnswered = false; break; }
+      }
+      document.getElementById('fit-btn').disabled = !allAnswered;
+    }
+
+    document.getElementById('fit-btn').addEventListener('click', function() {
+      var result = computeResult();
+      document.getElementById('result-heading').textContent = result.heading;
+      document.getElementById('result-body').innerHTML = result.body;
+      document.getElementById('result-links').innerHTML = result.links;
+      document.getElementById('fit-form').style.display = 'none';
+      document.getElementById('fit-progress').style.display = 'none';
+      document.getElementById('fit-btn').parentElement.style.display = 'none';
+      var r = document.getElementById('fit-result');
+      r.style.display = 'block';
+      r.classList.add('visible');
+    });
+
+    document.getElementById('fit-restart').addEventListener('click', function() {
+      answers = {};
+      currentQ = 0;
+      document.getElementById('fit-form').reset();
+      document.querySelectorAll('.fit-option').forEach(function(o){ o.classList.remove('selected'); });
+      document.getElementById('fit-result').style.display = 'none';
+      document.getElementById('fit-result').classList.remove('visible');
+      document.getElementById('fit-form').style.display = '';
+      document.getElementById('fit-progress').style.display = '';
+      document.getElementById('fit-btn').parentElement.style.display = '';
+      document.getElementById('fit-btn').disabled = true;
+      showQuestion(0);
+      updateProgress();
+    });
+
+    function computeResult() {
+      var estate    = answers['q0'];
+      var threat    = answers['q1'];
+      var cnapp     = answers['q2'];
+      var capacity  = answers['q3'];
+
+      // Wiz customer + exposure threat + cloud = DSPM feature may be enough
+      if (cnapp === 'yes-wiz' && threat === 'exposure' && estate === 'cloud-native') {
+        return {
+          heading: 'Wiz DSPM may be sufficient — evaluate before adding a standalone platform',
+          body: '<p>Your environment is cloud-native, the primary threat is data exposure and misconfiguration, and you already have Wiz deployed. Wiz\'s native DSPM capability adds data sensitivity context directly to the Security Graph — this is the configuration where DSPM-as-a-CNAPP-feature delivers the most value, including toxic combination detection that requires native data context.</p><p>The question before adding a standalone DSPM is: does the Wiz coverage reach all the data stores that need coverage, and is classification accuracy sufficient for the compliance evidence requirements? If the answer to both is yes, a standalone deployment adds cost and integration overhead without proportionate value. Scope the Wiz DSPM coverage against your requirements before committing to a second platform.</p>',
+          links: '<a href="/comparisons/wiz-dspm-vs-standalone/">Wiz DSPM vs. standalone &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/wiz/">Wiz profile &rarr;</a>'
+        };
+      }
+
+      // Behavioral threat detection = agent-based required
+      if (threat === 'behavioral') {
+        if (estate === 'on-prem-heavy' || estate === 'hybrid') {
+          return {
+            heading: 'Agent / collector architecture — Varonis is the primary fit',
+            body: '<p>Real-time behavioral detection on sensitive data access requires a platform that observes file system and data access events as they happen. API-based agentless platforms do not observe real-time access — they scan data at rest on a periodic schedule. Agent and collector architectures sit close enough to the data to capture every access event.</p><p>Varonis is the only platform in the DSPM market with DDR (Data Detection and Response) as a primary capability, built on behavioral baseline modeling across file servers, cloud, and SaaS. For hybrid or on-premises-heavy environments with a behavioral detection requirement, Varonis is the purpose-built answer. The deployment overhead is real: collector installation and management takes capacity. That cost is the access to the real-time data stream that agentless platforms cannot provide.</p>',
+            links: '<a href="/vendors/varonis/">Varonis profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/comparisons/cyera-vs-varonis/">Cyera vs. Varonis &rarr;</a> &nbsp;&middot;&nbsp; <a href="/guides/agentless-vs-agent-based/">Architecture guide &rarr;</a>'
+          };
+        } else {
+          return {
+            heading: 'Agent / collector architecture — behavioral detection requires it',
+            body: '<p>Real-time behavioral detection on sensitive data requires an agent or collector architecture, regardless of whether the environment is cloud-native. API-based platforms observe data posture at a point in time; they do not watch who accesses what as it happens. Detecting ransomware staging, insider threat, or compromised credential activity on data requires a real-time event stream that only collector-based platforms produce.</p><p>For a primarily cloud-native environment with a behavioral detection requirement, Varonis covers cloud and SaaS sources via API alongside its collector-based on-premises coverage. Evaluate whether the on-premises collector is needed for the specific environment, or whether Varonis\'s cloud-native coverage alone satisfies the behavioral detection requirement.</p>',
+            links: '<a href="/vendors/varonis/">Varonis profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/guides/agentless-vs-agent-based/">Architecture guide &rarr;</a>'
+          };
+        }
+      }
+
+      // Compliance / privacy ops
+      if (threat === 'compliance') {
+        if (estate === 'on-prem-heavy' || estate === 'hybrid') {
+          return {
+            heading: 'Data Security Platform with hybrid coverage — BigID is the primary fit',
+            body: '<p>Compliance and privacy operations at scale require an authoritative sensitive data inventory across every data source in scope. For hybrid or on-premises-heavy environments, this means the platform must connect to cloud environments, legacy databases, file servers, and on-premises systems in a single coverage model. Agentless cloud-native platforms cannot reach the on-premises layer.</p><p>BigID has the widest connector library of any platform in the market — 300+ sources including mainframe, legacy RDBMS, and on-premises file systems — and its DSAR automation is built to operate across that full source list. If compliance reporting must cover the entire data estate rather than just the cloud layer, BigID\'s connector breadth is the primary selection criterion.</p>',
+            links: '<a href="/vendors/bigid/">BigID profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/comparisons/bigid-vs-securiti/">BigID vs. Securiti &rarr;</a>'
+          };
+        } else {
+          return {
+            heading: 'Cloud-native Data Security Platform — BigID or Securiti depending on AI governance requirements',
+            body: '<p>For a cloud-native estate with compliance and privacy operations requirements, both BigID and Securiti are strong fits. The selection between them depends primarily on whether AI governance is a current program requirement.</p><p>If the organization is deploying LLMs, Copilot, or AI assistants at scale and needs to govern what data those systems access, Securiti has the most developed AI data governance capabilities in this category. If the requirement is DSAR at scale, privacy program management, and compliance reporting across a complex (though cloud-native) data estate, BigID\'s depth in DSAR workflow automation and classification across unusual source types is the stronger foundation.</p>',
+            links: '<a href="/comparisons/bigid-vs-securiti/">BigID vs. Securiti &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/bigid/">BigID profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/securiti/">Securiti profile &rarr;</a>'
+          };
+        }
+      }
+
+      // Exposure + cloud-native + low capacity
+      if (threat === 'exposure' && estate === 'cloud-native' && capacity === 'low') {
+        return {
+          heading: 'Agentless cloud-native DSPM — Cyera is the primary fit',
+          body: '<p>The environment is cloud-native, the threat is data exposure and misconfiguration, and the team has limited capacity for deployment overhead. This is the configuration where agentless cloud-native DSPM delivers maximum value with minimum friction: API-based connections, no agents, production-connected in days, and purpose-built for finding sensitive data across cloud data stores and SaaS — including data the governance program doesn\'t know exists.</p><p>Cyera is the platform most consistently rated for classification accuracy and shadow data discovery breadth in cloud-native environments. Sentra is the alternative if data lineage and business context mapping are part of the requirement alongside classification and posture.</p>',
+          links: '<a href="/vendors/cyera/">Cyera profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/comparisons/sentra-vs-cyera/">Sentra vs. Cyera &rarr;</a> &nbsp;&middot;&nbsp; <a href="/guides/agentless-vs-agent-based/">Architecture guide &rarr;</a>'
+        };
+      }
+
+      // Exposure + hybrid + moderate/high capacity
+      if (threat === 'exposure' && (estate === 'hybrid' || estate === 'on-prem-heavy')) {
+        if (capacity === 'low') {
+          return {
+            heading: 'Agentless coverage for the cloud layer — on-premises gap requires a second platform or scope adjustment',
+            body: '<p>The data estate is hybrid or on-premises-heavy, but the team has limited capacity for agent deployment. An agentless platform will cover the cloud and SaaS layer effectively, but will not reach on-premises file servers, NAS, or legacy databases. The gap is not a platform limitation — it is a structural constraint of agentless architecture.</p><p>Two paths: scope the initial DSPM deployment to the cloud layer only, acknowledging the on-premises gap and addressing it separately; or evaluate whether the on-premises data in scope warrants the collector deployment overhead. If the on-premises sensitive data risk is significant, the capacity constraint may be worth reconsidering before selecting a platform that cannot cover it.</p>',
+            links: '<a href="/guides/agentless-vs-agent-based/">Architecture guide &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/cyera/">Cyera profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/varonis/">Varonis profile &rarr;</a>'
+          };
+        } else {
+          return {
+            heading: 'Hybrid architecture — Varonis for on-premises and behavioral; agentless platform for cloud layer',
+            body: '<p>The combination of hybrid estate, exposure threat, and capacity for deployment overhead is the configuration where a two-platform architecture makes the most sense: Varonis covering on-premises file servers and hybrid environments with its collector architecture, and a cloud-native agentless platform (Cyera or Sentra) covering the cloud data stores where agentless is faster and more complete.</p><p>The risk in this configuration is scope overlap and governance complexity. Define each platform\'s coverage layer explicitly before deployment to avoid redundant scanning and inconsistent classification labels between platforms.</p>',
+            links: '<a href="/vendors/varonis/">Varonis profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/vendors/cyera/">Cyera profile &rarr;</a> &nbsp;&middot;&nbsp; <a href="/comparisons/cyera-vs-varonis/">Cyera vs. Varonis &rarr;</a>'
+          };
+        }
+      }
+
+      // Fallback
+      return {
+        heading: 'Agentless cloud-native DSPM is the likely starting point',
+        body: '<p>Based on the inputs, an agentless cloud-native DSPM platform is the most common fit for this profile. Cyera and Sentra are the strongest pure-play options; Wiz DSPM is an option if a CNAPP is already in use and the requirement is exposure-focused risk enrichment rather than a standalone data inventory.</p><p>Use the vendor comparison table to filter by your specific requirements, or consult the architecture guide for a deeper view of the deployment model decision.</p>',
+        links: '<a href="/tools/vendor-comparison/">Vendor comparison table &rarr;</a> &nbsp;&middot;&nbsp; <a href="/guides/agentless-vs-agent-based/">Architecture guide &rarr;</a>'
+      };
+    }
+
+    updateProgress();
+  })();
+  </script>
+</body>
+</html>

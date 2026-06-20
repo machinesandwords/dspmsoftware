@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Market Landscape — Independent Guide | DSPM Software</title>
+  <meta name="description" content="How the DSPM market is structured. Vendor categories, architectural fault lines, and a framework for deciding which platform fits your environment before you take a single vendor call.">
+  <link rel="canonical" href="https://dspmsoftware.com/landscape/">
+
+  <meta property="og:title" content="DSPM Market Landscape — Independent Guide | DSPM Software">
+  <meta property="og:description" content="How the DSPM market is structured. Vendor categories, architectural trade-offs, and a framework for deciding which platform fits your environment.">
+  <meta property="og:url" content="https://dspmsoftware.com/landscape/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "DSPM Market Landscape",
+    "description": "How the DSPM market is structured. Vendor categories, architectural trade-offs, and a framework for deciding which platform fits your environment.",
+    "url": "https://dspmsoftware.com/landscape/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Landscape", "item": "https://dspmsoftware.com/landscape/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .two-col-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: var(--hairline);
+      margin: 24px 0;
+    }
+    .contrast-block {
+      background: var(--surface);
+      padding: 20px 24px;
+    }
+    .contrast-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .contrast-block p {
+      font-size: var(--small);
+      color: var(--mid);
+      margin-bottom: 0;
+    }
+    .four-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: var(--hairline);
+      margin: 24px 0;
+    }
+    @media (max-width: 640px) {
+      .two-col-contrast, .four-col-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Landscape</span>
+        </div>
+
+        <span class="page-label">Landscape</span>
+        <h1>The DSPM Market: What It Is, What It Isn't, and What You Actually Need</h1>
+
+        <p class="lead">Data Security Posture Management started as a narrow category: agentless discovery of sensitive data in public cloud storage. It has since expanded to cover behavioral analytics, privacy compliance, AI data governance, and infrastructure-integrated risk correlation. Before you take a vendor call, you need to know which problem is yours, because the platform built for one problem is often wrong for another.</p>
+
+        <h2>Why this category exists</h2>
+
+        <p>Cloud-native data estates grow in ways that on-premises data governance was not designed to handle. A single data migration project can produce hundreds of new S3 buckets. A SaaS integration can begin writing customer records to a data warehouse without any schema approval. An AI training pipeline can ingest files from sources that predate any data classification policy the organization has written.</p>
+
+        <p>The result is a persistent gap between the data an organization governs and the data it actually has. Traditional data loss prevention tools work at the perimeter. Data catalogs track what the data engineering team inventoried. Neither was built to find what accumulated outside any process: shadow copies in development environments, staging databases with production data, collaboration tools that export to storage no one approved.</p>
+
+        <p>DSPM exists to close that gap. What it means in practice depends on which gap you have.</p>
+
+        <h2>Two buyers, different problems</h2>
+
+        <p>Most DSPM evaluations involve either a security team, a compliance or privacy team, or both. The framing differs enough that it changes which vendors are worth evaluating.</p>
+
+        <div class="two-col-contrast">
+          <div class="contrast-block">
+            <div class="contrast-label">Security team buyer</div>
+            <p>The primary question is risk: where is sensitive data exposed, what does it have access to, and what would the blast radius be if that access were abused? The buying criteria emphasize real-time detection, behavioral analytics on access patterns, integration with SIEM and SOAR workflows, and fast time-to-finding. The platforms that win these evaluations tend to be behavioral (Varonis), cloud-native with infrastructure context (Wiz, Cyera), or identity-centric (Symmetry). Classification depth matters less than what you can act on.</p>
+          </div>
+          <div class="contrast-block">
+            <div class="contrast-label">Compliance and privacy team buyer</div>
+            <p>The primary question is inventory: what data do we have, where is it, who can access it, and does its handling comply with the regulatory frameworks we're subject to? The buying criteria emphasize connector breadth, classification accuracy on unstructured documents, DSAR automation, and audit reporting. The platforms that win these evaluations tend to be data intelligence-focused (BigID), privacy-ops-centered (Securiti), or governance-led. Speed of response matters less than completeness of coverage.</p>
+          </div>
+        </div>
+
+        <p>Many organizations have both buyers involved in the same evaluation. When that happens, the most common mistake is building requirements that neither platform can fully satisfy, because the security team's criteria and the compliance team's criteria pull in different directions. The architectural fault lines below help clarify where those tradeoffs live.</p>
+
+        <h2>The four architectural fault lines</h2>
+
+        <p>These are the decisions that determine whether a platform fits your environment before any feature-level comparison makes sense.</p>
+
+        <h3>1. Agentless vs. agent-based</h3>
+
+        <p>Agentless DSPM connects via APIs: cloud provider APIs for storage metadata, SaaS platform APIs for collaboration data, database query endpoints for structured data stores. It deploys fast, requires no endpoint management, and works natively in cloud environments. What it trades: it cannot monitor data access in real-time the way a collector installed on a file server can, and its coverage depends on what the underlying API exposes.</p>
+
+        <p>Agent-based and collector-based platforms instrument data access directly. Varonis built its platform this way, which is why it delivers behavioral analytics that agentless platforms cannot match. The tradeoff is deployment complexity and the infrastructure required to run collectors at scale. The <a href="/guides/agentless-vs-agent-based/">agentless vs. agent-based guide</a> covers this in full.</p>
+
+        <h3>2. Classification-first vs. behavior-first</h3>
+
+        <p>Classification-first platforms start with the question: what data exists, what is it, and what regulatory category does it fall under? They optimize for finding data, labeling it accurately, and reporting on it. BigID, Cyera, and Securiti are built primarily around this model.</p>
+
+        <p>Behavior-first platforms start with the question: who is accessing data, how, and does the pattern look abnormal? Varonis built its entire architecture around access behavior before DSPM as a category existed. The data posture layer is built on top of deep access analytics. This approach produces findings that classification-first platforms cannot: not "this bucket contains PII" but "this service account accessed three data stores it had never touched before on Saturday at 2am."</p>
+
+        <h3>3. Identity-centric vs. data-centric</h3>
+
+        <p>Symmetry Systems built its platform around the relationship between identities and data objects rather than starting with data inventory. The output is a graph of who can access what at the object level, and what operations they can perform. This is the approach that maps most directly onto Zero Trust architecture and data sovereignty requirements.</p>
+
+        <p>Data-centric platforms start with the data and add access context as enrichment. Most DSPM platforms are data-centric. Identity-centric platforms are the minority, but they produce a different kind of answer to "what is our risk."</p>
+
+        <h3>4. Standalone DSPM vs. DSPM-as-CNAPP-feature</h3>
+
+        <p>Wiz and Palo Alto Prisma Cloud include DSPM as a feature tier within a unified cloud security platform. The case for this is real: data risk in infrastructure context is more actionable than data risk in isolation. Knowing a bucket contains unencrypted PII is one thing; knowing that bucket is attached to an unpatched workload with a public IP is something you can act on immediately.</p>
+
+        <p>The limitation is depth. DSPM inside a CNAPP platform receives investment proportional to its priority within a much larger product roadmap. Classification accuracy, connector coverage, and privacy-workflow features typically lag what a purpose-built DSPM platform ships. The <a href="/comparisons/wiz-dspm-vs-standalone/">Wiz DSPM vs. standalone comparison</a> covers this decision directly.</p>
+
+        <h2>How the vendor landscape maps to these fault lines</h2>
+
+        <div class="four-col-grid">
+          <div class="contrast-block">
+            <div class="contrast-label">Cloud-native pure-plays</div>
+            <p>Cyera, Sentra, Symmetry, Concentric AI. Agentless API-based. Built for cloud-native data estates. Weak at on-premises coverage and real-time behavioral analytics. Strong at classification speed, shadow data discovery, and AI pipeline coverage.</p>
+          </div>
+          <div class="contrast-block">
+            <div class="contrast-label">CNAPP platforms</div>
+            <p>Wiz, Palo Alto Prisma, SentinelOne, Orca. DSPM as a feature within a cloud security graph. Strong at infrastructure context and toxic-combination detection. Limited depth for compliance workflows, DSAR, and hybrid data estates.</p>
+          </div>
+          <div class="contrast-block">
+            <div class="contrast-label">Data security platforms</div>
+            <p>BigID, Varonis, Securiti, Thales, Spirion, Netwrix, OpenText. Broader coverage including legacy and on-premises systems. Higher deployment complexity. Strong at compliance reporting, DSAR, and behavioral analytics (Varonis). The default for organizations that cannot go cloud-only.</p>
+          </div>
+          <div class="contrast-block">
+            <div class="contrast-label">Architectural outliers</div>
+            <p>Cyberhaven, DataStealth, Rubrik, Cohesity. Non-standard approaches: endpoint + cloud lineage tracing, network-layer inline inspection, backup-stream classification. Each solves a specific problem that mainstream DSPM platforms don't. Worth evaluating if your environment matches the use case exactly.</p>
+          </div>
+        </div>
+
+        <h2>Where the market is going</h2>
+
+        <p>Two forces are reshaping the category simultaneously.</p>
+
+        <p>The first is CNAPP consolidation. Wiz, Palo Alto, and SentinelOne are absorbing DSPM capability into broader cloud security platforms. This is compressing margins for pure-play vendors and accelerating acquisition activity. Several of the cloud-native pure-plays that defined the category between 2019 and 2023 are likely acquisition targets. Consolidation risk should be a named evaluation criterion in any procurement decision: ask every pure-play what continuity looks like if they're acquired in the next 24 months.</p>
+
+        <p>The second is AI data security. The expansion of DSPM into AI governance, AI runtime controls, and AI pipeline visibility is the fastest-moving area in the category. Most major vendors are repositioning around this. None is fully mature. The buyer who needs AI data governance now is ahead of the tooling, but the gap is closing faster in this area than anywhere else in the market.</p>
+
+        <h2>Where to go next</h2>
+
+        <p>The <a href="/landscape/vendor-index/">vendor index</a> covers all 20 platforms by category with deployment model, coverage scope, and pricing tier. The <a href="/comparisons/">comparisons</a> cover the most frequently co-evaluated pairs. The <a href="/guides/">guides</a> go deeper on the operational questions: agentless vs. agent-based tradeoffs and what to ask before a DSPM POC. If you want to filter vendors by specific criteria, the <a href="/tools/vendor-comparison/">vendor comparison tool</a> is the fastest path.</p>
+
+        <div class="newsletter-block">
+          <span class="page-label">The Independent Defender</span>
+          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button">Subscribe free</button>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>

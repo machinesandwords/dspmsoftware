@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>How to Run a DSPM POC — Evaluation Guide | DSPM Software</title>
+  <meta name="description" content="How to design and run a DSPM proof of concept. What to test, how to scope the data set, and the criteria that differentiate platforms before you commit.">
+  <link rel="canonical" href="https://dspmsoftware.com/guides/dspm-poc-evaluation/">
+
+  <meta property="og:title" content="How to Run a DSPM POC | DSPM Software">
+  <meta property="og:description" content="DSPM POC design guide: what to evaluate, how to scope the data set, and the questions that differentiate platforms before you commit.">
+  <meta property="og:url" content="https://dspmsoftware.com/guides/dspm-poc-evaluation/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Run a DSPM POC",
+    "description": "How to design and run a DSPM proof of concept that tests what actually matters.",
+    "url": "https://dspmsoftware.com/guides/dspm-poc-evaluation/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dspmsoftware.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "DSPM POC Evaluation", "item": "https://dspmsoftware.com/guides/dspm-poc-evaluation/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides/">Guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>DSPM POC Evaluation</span>
+        </div>
+
+        <span class="page-label">Evaluation Guide</span>
+        <h1>How to Run a DSPM POC</h1>
+
+        <p class="lead">Most DSPM POCs evaluate the wrong things. They test whether the platform can find sensitive data at all — which every platform in the market can do — rather than testing the specific capabilities that will determine whether the platform fits the actual requirements. A POC designed around "does this find PII" will produce a tie between every vendor on the shortlist. A POC designed around the specific coverage gaps, accuracy requirements, and integration scenarios that matter to the organization will produce real differentiation.</p>
+
+        <h2>Before the POC: what you are actually evaluating</h2>
+
+        <p>The design question for any DSPM POC is: what does this platform need to do that another platform might not? The answer is different for every organization, but the categories are consistent:</p>
+
+        <p><strong>Coverage scope.</strong> Which data sources matter? If the primary data risk is in cloud data stores and SaaS, every agentless platform will cover it. If on-premises file servers or legacy databases are in scope, that immediately constrains the vendor shortlist to platforms with agent or collector architectures. The POC data set should include the sources that the final deployment will need to cover — not just the easy cloud buckets.</p>
+
+        <p><strong>Classification accuracy on the hard cases.</strong> Any platform will find a Social Security Number that looks like 123-45-6789. The test is what happens with data that requires context: a document that describes medical conditions without using structured PHI fields; a spreadsheet that contains sensitive financial projections written in natural language; a code repository that has hardcoded credentials embedded in a configuration file alongside 10,000 lines of benign code. Run the POC against data that matches the actual complexity of the estate, not a sanitized sample.</p>
+
+        <p><strong>False positive rate at scale.</strong> A platform that finds 10,000 findings in a 30-day POC is not necessarily better than one that finds 3,000. The question is what fraction of those findings require action. Request false positive rates from each vendor, then validate them on a sample of findings from the POC. A platform with high false positive rates creates remediation backlogs that are never cleared — which means the findings that matter get buried.</p>
+
+        <p><strong>Integration with the existing security stack.</strong> Where do DSPM findings need to go? If SIEM, CSPM, or ticketing integration is required, test it in the POC. A platform that produces excellent findings but requires manual export to get them into the workflow where they will be acted on is a platform that will be underused.</p>
+
+        <h2>Designing the POC data set</h2>
+
+        <p>The POC data set is the most important variable in the evaluation. A data set that does not reflect the actual estate will produce results that do not predict production performance.</p>
+
+        <div class="step-list">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <strong>Include a representative sample of each data source type in scope</strong>
+              <p>If the production environment includes S3, Snowflake, SharePoint, and Salesforce, include all four in the POC. Platforms that perform well on one source type but poorly on another will not reveal that gap unless all source types are in scope. A common POC mistake is connecting only the data source that is easiest to provision — which is typically the one every platform handles well.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <strong>Include intentionally difficult content</strong>
+              <p>Create or identify test data that represents the edge cases the platform will face in production: documents with sensitive data embedded in unexpected structures, data that requires domain knowledge to classify correctly, files where the sensitive content is incidental rather than the primary subject. If unstructured text classification is a requirement, test it with actual unstructured text — not with pre-formatted test data that every classifier handles.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <strong>Include shadow data scenarios</strong>
+              <p>If shadow data discovery is a requirement, create the conditions under which it occurs: a storage bucket that exists outside the formal governance catalog, a database copy in a development environment that was not cleaned up, a SaaS export in a cloud storage location that is not tracked. Run the POC against an environment that includes these scenarios and evaluate whether the platform surfaces them without being pointed at them.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-body">
+              <strong>Size the data set for meaningful scan completion</strong>
+              <p>A POC data set that is too small produces results that are not statistically meaningful. A POC data set that is too large creates scan completion time problems during the POC window. As a baseline: enough data to generate at least several hundred distinct findings across multiple sensitivity categories, and enough variety in source types to test cross-source classification consistency. Most vendors will provide guidance on data set sizing for POC design — request it.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2>The evaluation criteria that differentiate platforms</h2>
+
+        <p>These are the tests that produce differentiation in most DSPM POCs, after the baseline capability tests that every platform passes.</p>
+
+        <p><strong>Novel sensitive data category accuracy.</strong> Beyond standard PII and PHI, test against data categories specific to the organization. Financial services firms have data types that generic classifiers miss. Healthcare organizations have clinical documentation that requires domain context. Legal teams have privileged communications that look like ordinary documents. Define two or three organization-specific sensitive data categories and test each platform's accuracy before and after any configuration the vendor provides. The platforms that require significant tuning to handle these categories accurately will require significant ongoing tuning in production.</p>
+
+        <p><strong>Cross-source consistency.</strong> Connect the same logical data (or data of the same type) in multiple source systems and compare classification results across sources. If the same customer PII is in Salesforce and a Snowflake table, do both surfaces show the same classification label and risk level? Platforms with per-source classification logic often show inconsistent results across source types — a problem that compounds as the deployment scales to more sources.</p>
+
+        <p><strong>Remediation workflow completeness.</strong> Find a finding that requires action. Follow the full remediation workflow to see what happens: is the finding assigned to an owner, can the owner act on it within the platform or does the workflow exit to a ticketing system, is the finding marked resolved after action and removed from the active queue? The gap between "the platform surfaces findings" and "the findings get acted on at scale" is almost always a workflow problem, not a classification problem. Evaluate the full workflow, not just the finding generation.</p>
+
+        <p><strong>Permission context quality.</strong> For a sample of sensitive data findings, evaluate the quality of the identity and permission context attached to each finding. Does the platform tell you which specific identities have access, or just "access is overly permissive"? Can you see whether the identities with access are service accounts, humans, or external parties? Can you filter findings by identity type? Platforms that surface data-only findings without substantive identity context produce findings that are harder to prioritize.</p>
+
+        <p><strong>Scan performance at scale.</strong> Ask for reference customer data on scan duration and resource consumption at data volumes similar to the production environment. A platform that takes 30 days to complete an initial full scan of a large estate is not delivering continuous posture visibility — it is delivering a quarterly snapshot. Request the scan performance data and validate it against a reasonable estimate of the production data volume.</p>
+
+        <h2>Questions to ask during the POC</h2>
+
+        <p>These are questions the platform should be able to answer from the POC data set. Run them at the end of the POC period and evaluate the completeness of each answer:</p>
+
+        <ul>
+          <li>What is the total volume of sensitive data found, broken down by sensitivity category?</li>
+          <li>Which data stores contain the highest concentration of sensitive data?</li>
+          <li>Which sensitive data is publicly accessible or accessible to identities that should not have access?</li>
+          <li>What sensitive data exists in locations outside the formal data governance catalog?</li>
+          <li>Which identities have access to the most sensitive data, and is that access consistent with their role?</li>
+          <li>What sensitive data was created or modified in the last 30 days?</li>
+        </ul>
+
+        <p>Platforms that cannot answer all of these from the POC data — or that require manual export and pivot table analysis to answer them — will require that same workaround in production. Evaluate the answer quality, not just the platform's assertion that the question is answerable.</p>
+
+        <h2>Common POC failure modes</h2>
+
+        <p><strong>Grading on presentation, not capability.</strong> DSPM vendor POC decks and demos are polished. The vendor's solution engineer knows the platform's best workflows and will show them. The test is whether the platform works without the solution engineer running it. Request time with the platform unguided — at minimum, allocate a day for the internal team to explore without vendor support and evaluate what can be found and acted on independently.</p>
+
+        <p><strong>Not testing the integration layer.</strong> The DSPM platform's value is only realized if the findings reach the people and systems that act on them. The most common post-deployment complaint about DSPM platforms is not that they don't find sensitive data — it is that the findings don't make it into the workflows where they are acted on. Test every integration in the POC that will be required in production.</p>
+
+        <p><strong>Accepting vendor-provided test data.</strong> Some vendors will offer pre-configured POC environments or test data sets designed to show their platform in the best light. The POC should use actual production data (or a representative sample drawn from production) in a scope the organization controls. Vendor-provided test environments are demos, not evaluations.</p>
+
+        <p style="font-size:var(--small); margin-top:32px;">Related: <a href="/guides/agentless-vs-agent-based/">Agentless vs. agent-based guide</a> &nbsp;&middot;&nbsp; <a href="/tools/vendor-comparison/">Vendor comparison tool</a> &nbsp;&middot;&nbsp; <a href="/tools/architecture-fit/">Architecture fit tool</a> &nbsp;&middot;&nbsp; <a href="/landscape/">DSPM market landscape</a></p>
+
+        <div class="newsletter-block">
+          <span class="page-label">The Independent Defender</span>
+          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button">Subscribe free</button>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Wiz DSPM Review — Independent Analysis | DSPM Software</title>
+  <meta name="description" content="Independent analysis of Wiz's integrated DSPM. How DSPM works inside the Wiz Security Graph, and when a CNAPP-integrated approach is the right choice versus a standalone platform.">
+  <link rel="canonical" href="https://dspmsoftware.com/vendors/wiz/">
+
+  <meta property="og:title" content="Wiz DSPM — Independent Analysis | DSPM Software">
+  <meta property="og:description" content="Independent analysis of Wiz's DSPM. CNAPP-integrated data risk and when to choose it over a standalone platform.">
+  <meta property="og:url" content="https://dspmsoftware.com/vendors/wiz/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Wiz DSPM — Independent Analysis",
+    "description": "Independent analysis of Wiz's integrated DSPM capability within the Wiz Security Graph.",
+    "url": "https://dspmsoftware.com/vendors/wiz/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Vendor Index", "item": "https://dspmsoftware.com/landscape/vendor-index/" },
+      { "@type": "ListItem", "position": 3, "name": "Wiz", "item": "https://dspmsoftware.com/vendors/wiz/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/landscape/vendor-index/">Vendors</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Wiz</span>
+        </div>
+
+        <span class="page-label">Vendor Profile &mdash; CNAPP Platform</span>
+
+        <div class="tool-header">
+          <div class="tool-logo">W</div>
+          <div class="tool-meta">
+            <div class="tool-name">Wiz</div>
+            <div class="tool-category">CNAPP Platform — DSPM Integrated into Security Graph</div>
+            <div class="tool-url">wiz.io</div>
+          </div>
+        </div>
+
+        <div class="tool-specs">
+          <div class="tool-spec">
+            <div class="tool-spec-label">Deployment</div>
+            <div class="tool-spec-value">Agentless (CNAPP-integrated)</div>
+          </div>
+          <div class="tool-spec">
+            <div class="tool-spec-label">Coverage</div>
+            <div class="tool-spec-value">Cloud infrastructure + data</div>
+          </div>
+          <div class="tool-spec">
+            <div class="tool-spec-label">DSPM type</div>
+            <div class="tool-spec-value">Feature of CNAPP platform</div>
+          </div>
+          <div class="tool-spec">
+            <div class="tool-spec-label">Pricing</div>
+            <div class="tool-spec-value">Enterprise — contact for pricing</div>
+          </div>
+          <div class="tool-spec">
+            <div class="tool-spec-label">Founded</div>
+            <div class="tool-spec-value">2020</div>
+          </div>
+          <div class="tool-spec">
+            <div class="tool-spec-label">Compare</div>
+            <div class="tool-spec-value"><a href="/comparisons/wiz-dspm-vs-standalone/">vs. Standalone DSPM</a></div>
+          </div>
+        </div>
+
+        <p class="lead">Wiz is not a DSPM company. It is a CNAPP company that includes DSPM as a capability layer within its Security Graph. That distinction matters when evaluating it for data security requirements. Wiz's DSPM capability is genuinely useful for organizations already standardized on Wiz for cloud security — the integration with infrastructure context produces risk findings that standalone DSPM platforms cannot replicate. The question is whether DSPM-as-a-CNAPP-feature is sufficient for your data security program, or whether you need depth that a purpose-built platform provides.</p>
+
+        <h2>How DSPM works inside Wiz</h2>
+
+        <p>Wiz scans cloud data stores agentlessly as part of its broader CNAPP scanning: S3 buckets, Azure Blob Storage, GCS, Snowflake, RDS databases, and others. Identified sensitive data is ingested into the Wiz Security Graph alongside cloud infrastructure inventory (workloads, network configuration, IAM permissions, vulnerabilities, misconfigurations).</p>
+
+        <p>The Security Graph connects these data points into risk paths. A storage bucket containing unencrypted PII that is also publicly accessible from an unpatched workload is a different risk finding than a properly encrypted, access-controlled bucket in the same environment. Wiz surfaces the former as a "toxic combination," a priority finding that combines data sensitivity with infrastructure exploitability into a single actionable risk item. This cross-layer risk correlation is the primary reason organizations on Wiz choose to use its DSPM capability rather than adding a standalone platform.</p>
+
+        <h2>Key capabilities</h2>
+
+        <p><strong>DSPM integrated into Security Graph.</strong> Data risk findings are correlated with infrastructure findings in the same graph. A data exposure finding carries context about the workload it's accessible from, the identity that could reach it, and the vulnerability or misconfiguration that creates the path. This is not available in any standalone DSPM platform.</p>
+
+        <p><strong>Toxic combination detection.</strong> Wiz's signature output for data risk: findings that combine a data sensitivity signal with an exploitability signal from the infrastructure layer. Prioritization is based on the combination, not on data sensitivity alone.</p>
+
+        <p><strong>Data classification.</strong> Automated classification of sensitive data in connected cloud data stores: PII, PHI, financial data, credentials. Classification coverage is adequate for cloud-native environments. It does not match the depth, accuracy, or coverage breadth of purpose-built classification platforms for complex data estates.</p>
+
+        <p><strong>Data access risk.</strong> Identifies IAM permissions that provide excessive access to sensitive data stores and flags misconfigurations (public access, missing encryption, weak access policies). Similar in function to other cloud-native DSPM platforms, with the advantage of infrastructure context.</p>
+
+        <p><strong>Single-pane consolidation.</strong> For organizations already on Wiz, DSPM data appears in the same interface, same query language, and same alert workflow as every other cloud security finding. The operational value of not switching platforms is real.</p>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Toxic combination detection correlates data risk with infrastructure exploitability in a way no standalone DSPM can replicate</li>
+              <li>For existing Wiz customers, DSPM adds no additional deployment overhead</li>
+              <li>Single-pane visibility reduces context switching for security teams already using Wiz for cloud security</li>
+              <li>Wiz is a well-capitalized platform with continued investment; DSPM capability will develop alongside the broader product</li>
+              <li>Agentless architecture means fast coverage without endpoint management</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Limitations</div>
+            <ul>
+              <li>Classification depth, accuracy, and coverage breadth are shallower than purpose-built DSPM platforms</li>
+              <li>No shadow data discovery capability comparable to Cyera</li>
+              <li>No behavioral analytics; no DDR capability</li>
+              <li>Limited coverage of on-premises, legacy, and SaaS data sources outside core cloud providers</li>
+              <li>No DSAR, privacy operations, or compliance reporting workflows; not the right platform for compliance-team buyers</li>
+              <li>DSPM investment is bounded by its priority within the CNAPP roadmap</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <span class="verdict-label">Who this fits</span>
+          <p>Wiz DSPM is the right choice for security teams already standardized on Wiz for CNAPP, whose primary data security requirement is cloud-native exposure risk in infrastructure context, and who do not need the classification depth, privacy workflows, or hybrid coverage that a standalone platform provides. The toxic combination framing is genuinely useful; for organizations where data and infrastructure risk are evaluated by the same team, consolidating on Wiz is defensible.</p>
+          <p style="margin-top:12px;">It is not the right choice for compliance and privacy teams, for organizations with on-premises data estates, for buyers who need DSAR automation or regulatory reporting, or for security programs where classification depth and shadow data discovery are primary requirements. For those environments, standalone DSPM is the right evaluation path. The <a href="/comparisons/wiz-dspm-vs-standalone/">Wiz DSPM vs. standalone comparison</a> covers this decision in full.</p>
+        </div>
+
+        <p style="font-size:var(--small); margin-top:32px;">Related: <a href="/comparisons/wiz-dspm-vs-standalone/">Wiz DSPM vs. standalone</a> &nbsp;&middot;&nbsp; <a href="/vendors/cyera/">Cyera profile</a> &nbsp;&middot;&nbsp; <a href="/vendors/varonis/">Varonis profile</a></p>
+
+        <div class="newsletter-block">
+          <span class="page-label">The Independent Defender</span>
+          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button">Subscribe free</button>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>

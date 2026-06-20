@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Vendor Index | DSPM Software</title>
+  <meta name="description" content="All 20 significant DSPM platforms organized by category. Cloud-native pure-plays, CNAPP giants, data security platforms, hyper-scale cloud, and architectural outliers. No rankings. No sponsored placements.">
+  <link rel="canonical" href="https://dspmsoftware.com/landscape/vendor-index/">
+
+  <meta property="og:title" content="DSPM Vendor Index | DSPM Software">
+  <meta property="og:description" content="All 20 significant DSPM platforms by category. No rankings. No sponsored placements.">
+  <meta property="og:url" content="https://dspmsoftware.com/landscape/vendor-index/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "DSPM Vendor Index",
+    "description": "All 20 significant DSPM platforms organized by functional category. No rankings, no sponsored placements.",
+    "url": "https://dspmsoftware.com/landscape/vendor-index/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Landscape", "item": "https://dspmsoftware.com/landscape/" },
+      { "@type": "ListItem", "position": 3, "name": "Vendor Index", "item": "https://dspmsoftware.com/landscape/vendor-index/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .vendor-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 130px 100px;
+      border-bottom: var(--hairline);
+      align-items: start;
+    }
+    .vendor-row:last-child { border-bottom: none; }
+    .vendor-row:hover td, .vendor-row:hover > * { background: #f0f4fc; }
+    .vendor-cell { padding: 12px 14px; font-size: var(--small); }
+    .vendor-name { font-weight: 700; color: var(--charcoal); }
+    .vendor-name a { color: var(--charcoal); }
+    .vendor-name a:hover { color: var(--accent); }
+    .vendor-profile-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 1px 5px;
+      display: inline-block;
+      margin-top: 3px;
+    }
+    .vendor-desc { color: var(--mid); line-height: 1.6; }
+    .vendor-deploy { font-size: 11px; color: var(--mid); }
+    .vendor-pricing { font-size: 11px; color: var(--mid); text-align: right; padding-right: 14px; }
+    .section-header {
+      background: var(--bg);
+      border-bottom: var(--hairline);
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 11px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .vendor-table {
+      border: var(--hairline);
+      margin-bottom: 40px;
+    }
+    .table-head {
+      display: grid;
+      grid-template-columns: 160px 1fr 130px 100px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--charcoal);
+    }
+    .th { padding: 8px 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mid); }
+    .th:last-child { text-align: right; padding-right: 14px; }
+    @media (max-width: 640px) {
+      .vendor-row, .table-head { grid-template-columns: 1fr; }
+      .vendor-pricing { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/landscape/">Landscape</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Vendor Index</span>
+        </div>
+
+        <span class="page-label">Vendor Index</span>
+        <h1>DSPM Vendor Index</h1>
+
+        <p class="lead">All 20 significant DSPM platforms organized by architectural category. No rankings. No sponsored placements. Vendors with a full profile page are marked — those pages cover architecture, strengths, limitations, and fit guidance in depth.</p>
+
+        <div class="section-intro">
+          <p>Coverage scope and pricing change. Verify specifics directly with vendors before acting on any entry here. Publication date: June 2026. Use the <a href="/tools/vendor-comparison/">vendor comparison tool</a> to filter by deployment model, coverage, or pricing tier.</p>
+        </div>
+
+        <!-- Category 1: Cloud-Native Pure-Plays -->
+        <div class="vendor-table">
+          <div class="section-header">Cloud-Native Pure-Plays</div>
+          <div class="table-head">
+            <div class="th">Vendor</div>
+            <div class="th">What it does</div>
+            <div class="th">Deployment</div>
+            <div class="th">Pricing</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/cyera/">Cyera</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">AI-native classification across multi-cloud and SaaS; strong at shadow and dark data discovery; cloud data security posture and AI data risk.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (API-based)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/sentra/">Sentra</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Cloud-first data discovery with data lineage and business context mapping; tracks how data flows between identities and environments.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (API-based)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/symmetry-systems/">Symmetry Systems</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Graph-based object-level visibility; maps fine-grained permissions and identity-to-data relationships for Zero Trust and data sovereignty mandates.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (API-based)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/concentric-ai/">Concentric AI</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Semantic Intelligence engine using deep learning and NLP to classify unstructured text, collaboration data, and AI prompts beyond regex or pattern matching.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (API-based)</div>
+            <div class="vendor-pricing">Mid-market / Enterprise</div>
+          </div>
+        </div>
+
+        <!-- Category 2: CNAPP Platforms -->
+        <div class="vendor-table">
+          <div class="section-header">CNAPP &amp; Infrastructure Security Platforms</div>
+          <div class="table-head">
+            <div class="th">Vendor</div>
+            <div class="th">What it does</div>
+            <div class="th">Deployment</div>
+            <div class="th">Pricing</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/wiz/">Wiz</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">DSPM integrated into the Wiz Security Graph; maps data risk to infrastructure misconfigurations and active attack paths. Toxic combination detection is a core output.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (CNAPP-integrated)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Palo Alto Prisma Cloud</div>
+            </div>
+            <div class="vendor-cell vendor-desc">DSPM coupled with CIEM and development lifecycle tracing within the Prisma Cloud CNAPP platform; broad multi-cloud coverage.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (CNAPP-integrated)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">SentinelOne</div>
+            </div>
+            <div class="vendor-cell vendor-desc">DSPM within Singularity Cloud Security; connects runtime threat detection with data posture insights for automated isolation when a threat touches a critical data store.</div>
+            <div class="vendor-cell vendor-deploy">Agent + agentless</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Orca Security</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Agentless CNAPP with native DSPM scanning; combines data exposure risks with workload security controls via SideScanning architecture.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (SideScanning)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+        </div>
+
+        <!-- Category 3: Data Security Platforms -->
+        <div class="vendor-table">
+          <div class="section-header">Legacy Data Security &amp; Governance Platforms</div>
+          <div class="table-head">
+            <div class="th">Vendor</div>
+            <div class="th">What it does</div>
+            <div class="th">Deployment</div>
+            <div class="th">Pricing</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/bigid/">BigID</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Data intelligence at scale across hundreds of data sources including legacy on-prem databases, file shares, and pipeline tooling; privacy operations and compliance reporting.</div>
+            <div class="vendor-cell vendor-deploy">Hybrid (agent + agentless)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/varonis/">Varonis</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Behavioral analytics on data access patterns; real-time Data Detection and Response (DDR); automated least-privilege remediation across file shares and cloud.</div>
+            <div class="vendor-cell vendor-deploy">Agent / collector</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name"><a href="/vendors/securiti/">Securiti.ai</a></div>
+              <div class="vendor-profile-tag">Profile</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Data Command Center: DSPM with AI governance features, DSAR automation, and structured privacy compliance workflows across cloud and SaaS.</div>
+            <div class="vendor-cell vendor-deploy">Agentless (API-based)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Thales (Imperva)</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Data Security Platform pairing DSPM discovery with native protection controls: inline encryption, tokenization, and dynamic data masking.</div>
+            <div class="vendor-cell vendor-deploy">Hybrid</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Spirion</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Automated discovery and classification frameworks across hybrid environments; long-standing focus on classification accuracy for regulated industries.</div>
+            <div class="vendor-cell vendor-deploy">Agent-based</div>
+            <div class="vendor-pricing">Mid-market</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Netwrix</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Access auditing, change tracking, and risk minimization across structured data environments and legacy systems; strong in regulated verticals.</div>
+            <div class="vendor-cell vendor-deploy">Agent / collector</div>
+            <div class="vendor-pricing">Mid-market</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">OpenText</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Data posture, lifecycle discovery, and classification within a broader information management and enterprise cybersecurity portfolio.</div>
+            <div class="vendor-cell vendor-deploy">Hybrid</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+        </div>
+
+        <!-- Category 4: Hyper-Scale -->
+        <div class="vendor-table">
+          <div class="section-header">Hyper-Scale Cloud &amp; Ecosystem Providers</div>
+          <div class="table-head">
+            <div class="th">Vendor</div>
+            <div class="th">What it does</div>
+            <div class="th">Deployment</div>
+            <div class="th">Pricing</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Microsoft Purview</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Native data classification and posture across Azure, Microsoft 365, and Copilot environments via Purview; DSPM for multi-cloud via Defender for Cloud. Deep Microsoft ecosystem integration is the primary advantage.</div>
+            <div class="vendor-cell vendor-deploy">Platform-native</div>
+            <div class="vendor-pricing">Enterprise (bundled)</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">IBM Guardium</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Modern cloud data posture capabilities integrated with enterprise risk management within the Guardium suite; strong in regulated verticals with existing IBM deployments.</div>
+            <div class="vendor-cell vendor-deploy">Hybrid</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+        </div>
+
+        <!-- Category 5: Outliers -->
+        <div class="vendor-table">
+          <div class="section-header">Architectural &amp; Resiliency Outliers</div>
+          <div class="table-head">
+            <div class="th">Vendor</div>
+            <div class="th">What it does</div>
+            <div class="th">Deployment</div>
+            <div class="th">Pricing</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Cyberhaven</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Unified DSPM + DLP tracing data lineage dynamically as employees create, move, or modify files across endpoints and cloud. Distinct because it follows data movement rather than scanning at-rest data.</div>
+            <div class="vendor-cell vendor-deploy">Endpoint agent</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">DataStealth</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Network-layer inline approach: real-time discovery, posture assessment, and tokenization without agents or code modifications. Strongest for legacy mainframes and strict data residency environments.</div>
+            <div class="vendor-cell vendor-deploy">Network-layer (inline)</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Rubrik</div>
+            </div>
+            <div class="vendor-cell vendor-desc">DSPM built into the production backup stream; classification and ransomware risk analysis on snapshot data without performance overhead on live systems.</div>
+            <div class="vendor-cell vendor-deploy">Backup-stream integrated</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+
+          <div class="vendor-row">
+            <div class="vendor-cell">
+              <div class="vendor-name">Cohesity</div>
+            </div>
+            <div class="vendor-cell vendor-desc">Same backup-stream DSPM model as Rubrik; classification and malware risk analysis on snapshot indexes. Primary differentiation is platform breadth within the Cohesity data management suite.</div>
+            <div class="vendor-cell vendor-deploy">Backup-stream integrated</div>
+            <div class="vendor-pricing">Enterprise</div>
+          </div>
+        </div>
+
+        <p style="font-size:11px; color:var(--faint);">Vendor coverage is current as of June 2026. Pricing tiers are approximate. Verify specifics directly before procurement. Vendor inclusion is editorially determined.</p>
+
+        <div class="newsletter-block">
+          <span class="page-label">The Independent Defender</span>
+          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button">Subscribe free</button>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>
