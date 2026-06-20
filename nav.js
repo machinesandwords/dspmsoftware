@@ -23,17 +23,6 @@
     <div class="nav-divider"></div>
 
     <div class="nav-section">
-      <div class="nav-section-label">Vendors</div>
-      <a href="/landscape/vendor-index/" class="nav-item depth-0">All vendors</a>
-      <a href="/vendors/cyera/" class="nav-item depth-1">&#9500; Cyera</a>
-      <a href="/vendors/varonis/" class="nav-item depth-1">&#9500; Varonis</a>
-      <a href="/vendors/wiz/" class="nav-item depth-1">&#9500; Wiz</a>
-      <a href="/landscape/vendor-index/" class="nav-item depth-1">&#9492; more</a>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="nav-section">
       <div class="nav-section-label">Tools</div>
       <a href="/tools/" class="nav-item depth-0">All tools</a>
       <a href="/tools/vendor-comparison/" class="nav-item depth-1">&#9500; Vendor comparison</a>
