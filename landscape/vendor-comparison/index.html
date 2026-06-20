@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Vendor Comparison Tool | DSPM Software</title>
+  <meta name="description" content="Filter and compare 20 DSPM vendors by execution model, deployment, coverage, and AI pipeline support. Independent. No sponsored placements.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/vendor-comparison/">
+
+  <meta property="og:title" content="DSPM Vendor Comparison Tool | DSPM Software">
+  <meta property="og:description" content="Filter and compare 20 DSPM vendors by execution model, deployment, coverage, and AI pipeline support.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/vendor-comparison/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DSPM Vendor Comparison Tool",
+    "url": "https://dspmsoftware.com/tools/vendor-comparison/",
+    "description": "Filter and compare DSPM vendors by execution model, deployment, coverage, and AI pipeline support. Independent. No sponsored placements.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://dspmsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Vendor Comparison", "item": "https://dspmsoftware.com/tools/vendor-comparison/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <script src="/config.js" defer></script>
+
+  <style>
+    .tool-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .filter-panel {
+      position: sticky;
+      top: 60px;
+      background: var(--surface);
+      border: var(--hairline);
+      padding: 1rem;
+    }
+    .filter-section { margin-bottom: 1.25rem; }
+    .filter-section:last-child { margin-bottom: 0; }
+    .filter-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--charcoal);
+      margin-bottom: 0.5rem; display: block;
+    }
+    .filter-option {
+      display: flex; align-items: center; gap: 0.4rem;
+      margin-bottom: 0.3rem; cursor: pointer;
+    }
+    .filter-option input[type="checkbox"] {
+      accent-color: var(--accent); width: 13px; height: 13px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .filter-option span {
+      font-size: 12px; color: var(--charcoal); cursor: pointer; line-height: 1.3;
+    }
+    .filter-reset {
+      font-size: 11px; color: var(--accent); cursor: pointer; background: none; border: none;
+      padding: 0; font-family: 'Space Mono', monospace; text-decoration: underline;
+      margin-top: 0.75rem; display: block;
+    }
+    .filter-reset:hover { color: var(--accent-dim); }
+    .results-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 1rem; border-bottom: var(--hairline); padding-bottom: 0.5rem;
+    }
+    .results-count { font-size: 12px; color: var(--mid); }
+    .results-count strong { color: var(--accent); }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .vendor-card {
+      background: var(--surface); padding: 1.1rem;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .vendor-card-header {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;
+    }
+    .vendor-card-name { font-size: 14px; font-weight: 700; }
+    .vendor-card-name a { color: var(--charcoal); text-decoration: none; }
+    .vendor-card-name a:hover { color: var(--accent); }
+    .vendor-card-name span.plain { color: var(--charcoal); }
+    .vendor-card-price { font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .vendor-card-tier {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--faint);
+    }
+    .vendor-card-desc { font-size: 12px; color: var(--charcoal); line-height: 1.6; }
+    .vendor-card-fit {
+      font-size: 12px; color: var(--mid); line-height: 1.5;
+      border-top: var(--hairline); padding-top: 0.5rem;
+    }
+    .vendor-card-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .vtag {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--mid); background: var(--bg); border: var(--hairline);
+      padding: 0.15rem 0.4rem; line-height: 1.4;
+    }
+    .vtag-matched { color: var(--accent); border-color: var(--accent); background: var(--accent-pale); }
+    .vendor-card-watch {
+      font-size: 11px; color: var(--mid);
+      border-top: var(--hairline); padding-top: 0.5rem; font-style: italic;
+    }
+    .vendor-card-watch::before {
+      content: "Watch: ";
+      font-weight: 700; font-style: normal; color: var(--faint);
+    }
+    .no-results {
+      padding: 2rem; text-align: center; color: var(--mid); font-size: 13px;
+      background: var(--surface); border: var(--hairline);
+    }
+    .active-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; min-height: 24px; }
+    .active-filter-tag {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--accent); background: var(--accent-pale); border: 1px solid var(--accent);
+      padding: 0.2rem 0.5rem; display: flex; align-items: center; gap: 0.3rem;
+    }
+    .active-filter-tag button {
+      background: none; border: none; color: var(--accent);
+      cursor: pointer; font-family: 'Space Mono', monospace; font-size: 12px; padding: 0; line-height: 1;
+    }
+    .data-note {
+      font-size: 12px; color: var(--faint); margin-top: 0.5rem;
+    }
+    @media (max-width: 800px) {
+      .tool-layout { grid-template-columns: 1fr; }
+      .filter-panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content" style="max-width:100%;">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Vendor Comparison</span>
+        </nav>
+
+        <span class="page-label">Tools</span>
+        <h1>DSPM Vendor Comparison Tool</h1>
+
+        <p class="lead">Filter the full DSPM vendor landscape by execution model, deployment architecture, data coverage, and AI pipeline support. No sponsored placements — vendors appear based on fit, not commercial relationships.</p>
+
+        <div class="tool-layout">
+
+          <!-- Filter panel -->
+          <div class="filter-panel">
+
+            <div class="filter-section">
+              <span class="filter-label">Execution Model</span>
+              <label class="filter-option"><input type="checkbox" name="category" value="cloud-native"> <span>Cloud-native pure-play</span></label>
+              <label class="filter-option"><input type="checkbox" name="category" value="cnapp"> <span>CNAPP platform</span></label>
+              <label class="filter-option"><input type="checkbox" name="category" value="dsp"> <span>Data security platform</span></label>
+              <label class="filter-option"><input type="checkbox" name="category" value="hyperscale"> <span>Hyper-scale / ecosystem</span></label>
+              <label class="filter-option"><input type="checkbox" name="category" value="outlier"> <span>Architectural outlier</span></label>
+            </div>
+
+            <div class="filter-section">
+              <span class="filter-label">Deployment</span>
+              <label class="filter-option"><input type="checkbox" name="deployment" value="agentless"> <span>Agentless</span></label>
+              <label class="filter-option"><input type="checkbox" name="deployment" value="agent-based"> <span>Agent-based</span></label>
+              <label class="filter-option"><input type="checkbox" name="deployment" value="hybrid"> <span>Hybrid</span></label>
+              <label class="filter-option"><input type="checkbox" name="deployment" value="network-layer"> <span>Network-layer</span></label>
+              <label class="filter-option"><input type="checkbox" name="deployment" value="backup-integrated"> <span>Backup-integrated</span></label>
+            </div>
+
+            <div class="filter-section">
+              <span class="filter-label">Coverage</span>
+              <label class="filter-option"><input type="checkbox" name="coverage" value="cloud"> <span>Cloud / SaaS</span></label>
+              <label class="filter-option"><input type="checkbox" name="coverage" value="hybrid"> <span>Hybrid (cloud + on-prem)</span></label>
+            </div>
+
+            <div class="filter-section">
+              <span class="filter-label">AI Pipeline Coverage</span>
+              <label class="filter-option"><input type="checkbox" name="ai_coverage" value="true"> <span>Yes</span></label>
+              <label class="filter-option"><input type="checkbox" name="ai_coverage" value="false"> <span>No / Unconfirmed</span></label>
+            </div>
+
+            <div class="filter-section">
+              <span class="filter-label">Pricing Tier</span>
+              <label class="filter-option"><input type="checkbox" name="pricing" value="$"> <span>$ — Lighter footprint</span></label>
+              <label class="filter-option"><input type="checkbox" name="pricing" value="$$"> <span>$$ — Mid-market</span></label>
+              <label class="filter-option"><input type="checkbox" name="pricing" value="$$$"> <span>$$$ — Enterprise</span></label>
+            </div>
+
+            <div class="filter-section">
+              <span class="filter-label">Company Size Fit</span>
+              <label class="filter-option"><input type="checkbox" name="company_size" value="mid-market"> <span>Mid-market</span></label>
+              <label class="filter-option"><input type="checkbox" name="company_size" value="enterprise"> <span>Enterprise</span></label>
+            </div>
+
+            <button class="filter-reset" id="reset-btn">Reset all filters</button>
+          </div>
+
+          <!-- Results -->
+          <div class="results-area">
+            <div class="active-filters" id="active-filters"></div>
+            <div class="results-header">
+              <span class="results-count" id="results-count"><strong>0</strong> vendors</span>
+            </div>
+            <div class="results-grid" id="results-grid"></div>
+            <p class="data-note">Based on publicly available vendor information as of June 2026. Validate current capabilities directly with vendors before purchase.</p>
+          </div>
+
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+
+  <script>
+    var vendors = [];
+    var activeFilters = {
+      category: [],
+      deployment: [],
+      coverage: [],
+      ai_coverage: [],
+      pricing: [],
+      company_size: []
+    };
+
+    var categoryLabels = {
+      'cloud-native': 'Cloud-native',
+      'cnapp':        'CNAPP',
+      'dsp':          'Data security platform',
+      'hyperscale':   'Hyper-scale',
+      'outlier':      'Outlier'
+    };
+
+    var deploymentLabels = {
+      'agentless':          'Agentless',
+      'agent-based':        'Agent-based',
+      'hybrid':             'Hybrid deployment',
+      'network-layer':      'Network-layer',
+      'backup-integrated':  'Backup-integrated'
+    };
+
+    var coverageLabels = {
+      'cloud':  'Cloud / SaaS',
+      'hybrid': 'Hybrid coverage'
+    };
+
+    fetch('/vendors.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        vendors = data;
+        render();
+      });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        var name = this.name;
+        var value = this.value;
+        if (this.checked) {
+          if (!activeFilters[name]) activeFilters[name] = [];
+          activeFilters[name].push(value);
+        } else {
+          activeFilters[name] = activeFilters[name].filter(function(v) { return v !== value; });
+        }
+        render();
+      });
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', function() {
+      Object.keys(activeFilters).forEach(function(k) { activeFilters[k] = []; });
+      document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) { cb.checked = false; });
+      render();
+    });
+
+    function hasActiveFilters() {
+      return Object.values(activeFilters).some(function(arr) { return arr.length > 0; });
+    }
+
+    function vendorMatches(v) {
+      if (activeFilters.category.length && !activeFilters.category.includes(v.category)) return false;
+      if (activeFilters.deployment.length && !activeFilters.deployment.includes(v.deployment)) return false;
+      if (activeFilters.coverage.length && !activeFilters.coverage.includes(v.coverage)) return false;
+      if (activeFilters.ai_coverage.length && !activeFilters.ai_coverage.includes(String(v.ai_coverage))) return false;
+      if (activeFilters.pricing.length && !activeFilters.pricing.includes(v.pricing)) return false;
+      if (activeFilters.company_size.length && !activeFilters.company_size.some(function(s) { return (v.company_size || []).includes(s); })) return false;
+      return true;
+    }
+
+    function renderActiveFilters() {
+      var container = document.getElementById('active-filters');
+      var tags = [];
+      Object.keys(activeFilters).forEach(function(key) {
+        activeFilters[key].forEach(function(val) {
+          tags.push({ key: key, val: val });
+        });
+      });
+      if (!tags.length) { container.innerHTML = ''; return; }
+      container.innerHTML = tags.map(function(t) {
+        var label = t.val;
+        if (t.key === 'category') label = categoryLabels[t.val] || t.val;
+        if (t.key === 'deployment') label = deploymentLabels[t.val] || t.val;
+        if (t.key === 'coverage') label = coverageLabels[t.val] || t.val;
+        if (t.key === 'ai_coverage') label = t.val === 'true' ? 'AI Coverage: Yes' : 'AI Coverage: No';
+        return '<span class="active-filter-tag">' + label +
+          '<button onclick="removeFilter(\'' + t.key + '\',\'' + t.val + '\')">&times;</button></span>';
+      }).join('');
+    }
+
+    function removeFilter(key, val) {
+      activeFilters[key] = activeFilters[key].filter(function(v) { return v !== val; });
+      var cb = document.querySelector('input[name="' + key + '"][value="' + val + '"]');
+      if (cb) cb.checked = false;
+      render();
+    }
+
+    function renderCard(v) {
+      var categoryMatched = activeFilters.category.includes(v.category);
+      var categoryTag = '<span class="vtag' + (categoryMatched ? ' vtag-matched' : '') + '">' +
+        (v.category_label || categoryLabels[v.category] || v.category) + '</span>';
+
+      var deployMatched = activeFilters.deployment.includes(v.deployment);
+      var deployTag = '<span class="vtag' + (deployMatched ? ' vtag-matched' : '') + '">' +
+        (v.deployment_label || deploymentLabels[v.deployment] || v.deployment) + '</span>';
+
+      var coverageMatched = activeFilters.coverage.includes(v.coverage);
+      var coverageTag = '<span class="vtag' + (coverageMatched ? ' vtag-matched' : '') + '">' +
+        (v.coverage_label || coverageLabels[v.coverage] || v.coverage) + '</span>';
+
+      var aiMatched = activeFilters.ai_coverage.includes(String(v.ai_coverage));
+      var aiTag = '<span class="vtag' + (aiMatched ? ' vtag-matched' : '') + '">' +
+        (v.ai_coverage ? 'AI coverage' : 'No AI coverage') + '</span>';
+
+      var watchHtml = v.watch
+        ? '<div class="vendor-card-watch">' + v.watch + '</div>'
+        : '';
+
+      var nameCell = v.profile_url
+        ? '<a href="' + v.profile_url + '">' + v.name + '</a>'
+        : '<span class="plain">' + v.name + '</span>';
+
+      return '<div class="vendor-card">' +
+        '<div class="vendor-card-header">' +
+          '<div>' +
+            '<div class="vendor-card-name">' + nameCell + '</div>' +
+            '<div class="vendor-card-tier">' + v.tier + '</div>' +
+          '</div>' +
+          '<div class="vendor-card-price">' + v.pricing + '</div>' +
+        '</div>' +
+        '<div class="vendor-card-desc">' + v.description + '</div>' +
+        '<div class="vendor-card-fit">' + v.best_fit + '</div>' +
+        '<div class="vendor-card-tags">' + categoryTag + deployTag + coverageTag + aiTag + '</div>' +
+        watchHtml +
+        '</div>';
+    }
+
+    function render() {
+      renderActiveFilters();
+      var filtered = hasActiveFilters()
+        ? vendors.filter(vendorMatches)
+        : vendors.slice().sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+      var countEl = document.getElementById('results-count');
+      countEl.innerHTML = '<strong>' + filtered.length + '</strong> vendor' + (filtered.length !== 1 ? 's' : '');
+
+      var grid = document.getElementById('results-grid');
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="no-results">No vendors match the selected filters. Try removing one or more criteria.</div>';
+        return;
+      }
+      grid.innerHTML = filtered.map(renderCard).join('');
+    }
+  </script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>
