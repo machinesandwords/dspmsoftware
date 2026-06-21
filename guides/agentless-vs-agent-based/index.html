@@ -44,16 +44,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
   <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
   <script src="/config.js" defer></script>
+
+  <style>
+    .step-list { margin: 24px 0 32px; }
+    .step { display: flex; gap: 16px; padding: 16px 0; border-bottom: var(--hairline); }
+    .step:last-child { border-bottom: none; }
+    .step-number {
+      flex-shrink: 0; width: 28px; height: 28px; border: 1px solid var(--accent);
+      color: var(--accent); font-weight: 700; font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body strong { display: block; font-size: var(--small); color: var(--charcoal); margin-bottom: 4px; }
+    .step-body p { font-size: var(--small); color: var(--mid); line-height: 1.6; margin: 0; }
+  </style>
 </head>
 <body>
 
   <header class="topbar">
     <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
     <div class="topbar-divider"></div>
-    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
     <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
   </header>
 
@@ -65,42 +78,42 @@
     <main class="main">
       <article class="content">
 
-        <div class="breadcrumb">
+        <nav class="breadcrumb">
           <a href="/">Home</a>
           <span class="breadcrumb-sep">/</span>
           <a href="/guides/">Guides</a>
           <span class="breadcrumb-sep">/</span>
           <span>Agentless vs. Agent-Based</span>
-        </div>
+        </nav>
 
         <span class="page-label">Architecture Guide</span>
         <h1>Agentless vs. Agent-Based DSPM</h1>
 
-        <p class="lead">The deployment model is the first architectural decision in any DSPM evaluation, and it is the one that most directly constrains the vendor shortlist. Agentless platforms connect to data stores via API — no software to deploy, no infrastructure to manage, coverage achieved through cloud-native connections. Agent and collector platforms deploy software closer to the data — on hosts, servers, or network collection points — to achieve coverage depth or real-time visibility that API-based approaches cannot deliver. These are not better and worse options. They are different answers to different coverage requirements.</p>
+        <p class="lead">The deployment model is the first architectural decision in any DSPM evaluation, and it is the one that most directly constrains the vendor shortlist. Agentless platforms connect to data stores via API, with no software to deploy and no infrastructure to manage, achieving coverage through cloud-native connections. Agent and collector platforms deploy software closer to the data, on hosts, servers, or network collection points, to reach coverage depth or real-time visibility that API-based approaches cannot deliver. These are different answers to different coverage requirements, not a better option and a worse one.</p>
 
         <h2>What agentless means in practice</h2>
 
-        <p>Agentless DSPM platforms connect to cloud services, data stores, and SaaS applications through their native APIs and cloud provider SDKs. The platform requests read access to data stores — S3 buckets, Snowflake databases, Azure Blob containers, Salesforce objects — and scans them without any software running on the systems that host those data stores.</p>
+        <p>Agentless DSPM platforms connect to cloud services, data stores, and SaaS applications through their native APIs and cloud provider SDKs. The platform requests read access to data stores, S3 buckets, Snowflake databases, Azure Blob containers, Salesforce objects, and scans them without any software running on the systems that host those data stores.</p>
 
-        <p>The operational implication: deployment is fast. A cloud-native organization can grant API permissions, connect the platform to its cloud accounts, and have the first scan results within hours or days. No change management processes for agent deployment, no compatibility testing with host operating systems, no ongoing agent lifecycle management.</p>
+        <p>The operational implication: deployment is fast. A cloud-native organization can grant API permissions, connect the platform to its cloud accounts, and have the first scan results within hours or days. There's no change management process for agent deployment, no compatibility testing with host operating systems, no ongoing agent lifecycle management.</p>
 
-        <p>The coverage implication: agentless platforms are bounded by what APIs expose. If a cloud provider's API surfaces the data in a storage service, the platform can scan it. If the data lives in a location that does not have an API — a legacy file server running CIFS, a mainframe dataset, a NAS device on an on-premises network — the agentless platform cannot reach it.</p>
+        <p>The coverage implication: agentless platforms are bounded by what APIs expose. If a cloud provider's API surfaces the data in a storage service, the platform can scan it. A legacy file server running CIFS, a mainframe dataset, or a NAS device on an on-premises network typically has no comparable API, and an agentless platform simply has no path to reach data in that location.</p>
 
         <p>The behavioral implication: API-based platforms see data at rest. They scan what exists in storage, classify it, and assess what access configurations apply. They do not observe data access in real-time. A user who downloads a sensitive file from S3 generates an event in CloudTrail, not in the DSPM platform's activity feed.</p>
 
         <div class="callout">
-          <strong>The shadow data advantage.</strong> Agentless platforms have a structural advantage for shadow data discovery: because they connect directly to cloud provider APIs, they can enumerate all storage resources in a cloud account, including ones not registered in any governance catalog. An agentless scan finds the forgotten S3 bucket that was created three years ago by a developer for a one-time migration and never cleaned up. An agent-based platform cannot find it unless the agent is pointed at it.
+          <strong>The shadow data advantage.</strong> Agentless platforms have a structural advantage for shadow data discovery: because they connect directly to cloud provider APIs, they can enumerate all storage resources in a cloud account, including ones not registered in any governance catalog. An agentless scan finds the forgotten S3 bucket that was created three years ago by a developer for a one-time migration and never cleaned up. An agent-based platform can only find that bucket if the agent happens to be pointed at it.
         </div>
 
         <h2>What agent-based and collector architectures mean in practice</h2>
 
-        <p>Agent-based platforms deploy software — either lightweight agents on hosts or network-layer collectors — that sits closer to the data than an API connection can reach. The classic example is Varonis: the platform deploys collectors that sit on or near Windows file servers, NAS devices, and Active Directory, where they capture file system activity in real-time. This is not a workaround for API limitations. It is the only way to achieve the coverage Varonis is designed for: real-time observation of every file access, rename, move, and delete across a Windows environment.</p>
+        <p>Agent-based platforms deploy software, either lightweight agents on hosts or network-layer collectors, that sits closer to the data than an API connection can reach. The classic example is Varonis: the platform deploys collectors that sit on or near Windows file servers, NAS devices, and Active Directory, where they capture file system activity in real-time. That collector architecture is the only way to achieve the coverage Varonis is built around: real-time observation of every file access, rename, move, and delete across a Windows environment.</p>
 
         <p>The operational implication: deployment is slower and more complex. Collectors need to be sized, installed, and maintained. Compatibility with host operating systems and file system versions must be validated. Agent deployments in complex on-premises environments typically require professional services involvement and take weeks to months to reach full coverage.</p>
 
-        <p>The coverage implication: agent and collector architectures reach data sources that APIs cannot. On-premises file servers, network-attached storage, legacy databases, and mainframe environments are all in scope for agent-based platforms. For organizations with significant on-premises data estates, this coverage is not optional — it is the reason the platform exists.</p>
+        <p>The coverage implication: agent and collector architectures reach data sources that APIs cannot. On-premises file servers, network-attached storage, legacy databases, and mainframe environments are all in scope for agent-based platforms. For organizations with significant on-premises data estates, that coverage is the entire reason to choose this architecture in the first place.</p>
 
-        <p>The behavioral implication: agent and collector architectures observe access in real-time. This is the foundation for behavioral analytics, User and Entity Behavior Analytics (UEBA), Data Detection and Response (DDR), and automated threat detection. Detecting ransomware staging requires watching thousands of rapid sequential file reads and writes. That data does not exist in an API response — it only exists in a real-time file system event stream.</p>
+        <p>The behavioral implication: agent and collector architectures observe access in real-time. This is the foundation for behavioral analytics, User and Entity Behavior Analytics (UEBA), Data Detection and Response (DDR), and automated threat detection. Detecting ransomware staging requires watching thousands of rapid sequential file reads and writes. That data does not exist in an API response. It only exists in a real-time file system event stream.</p>
 
         <h2>The three requirements that determine which architecture fits</h2>
 
@@ -109,48 +122,50 @@
             <div class="step-number">1</div>
             <div class="step-body">
               <strong>On-premises and file server coverage</strong>
-              <p>If a meaningful fraction of the sensitive data estate lives on Windows file servers, NAS, SharePoint on-premises, or legacy databases with no cloud API, an agentless platform cannot cover it. The question is not whether some data is on-premises — most enterprise environments have some. The question is whether the on-premises data is a significant part of the data risk requiring coverage. If yes, agent or collector architecture is required. If the on-premises data estate is residual and the primary risk is in cloud and SaaS, agentless is the faster and lower-overhead path.</p>
+              <p>If a meaningful fraction of the sensitive data estate lives on Windows file servers, NAS, SharePoint on-premises, or legacy databases with no cloud API, an agentless platform cannot cover it. The question is not whether some data is on-premises; most enterprise environments have some. The question is whether the on-premises data is a significant part of the data risk requiring coverage. If yes, agent or collector architecture is required. If the on-premises data estate is residual and the primary risk is in cloud and SaaS, agentless is the faster and lower-overhead path.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-body">
               <strong>Real-time behavioral detection requirements</strong>
-              <p>If the use case includes detecting ransomware staging, insider threat, compromised credential behavior, or any threat scenario that requires watching data access as it happens, agentless architecture cannot satisfy it. API-based platforms do not observe real-time data access. Agent or collector architecture is the only path to genuine behavioral detection. If the threat model is data exposure and misconfiguration rather than behavioral threat detection, this requirement does not apply and agentless platforms are not disadvantaged.</p>
+              <p>If the use case includes detecting ransomware staging, insider threat, compromised credential behavior, or any threat scenario that requires watching data access as it happens, agentless architecture cannot satisfy it. API-based platforms do not observe real-time data access. Agent or collector architecture is the only path to genuine behavioral detection. If the threat model is data exposure and misconfiguration rather than behavioral threat detection, this requirement does not apply, and agentless platforms are not disadvantaged.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-number">3</div>
             <div class="step-body">
               <strong>Deployment overhead capacity</strong>
-              <p>Agent and collector deployments require ongoing operational capacity: agent installation, version management, compatibility maintenance, and scaling as the environment changes. In environments that are growing fast, are highly cloud-native, or have limited infrastructure operations capacity, agentless platforms deliver coverage without the deployment overhead. The constraint is not theoretical — organizations that underestimate the cost of managing a collector deployment at scale often find that DSPM coverage lags the data estate because new environments are not connected promptly.</p>
+              <p>Agent and collector deployments require ongoing operational capacity: agent installation, version management, compatibility maintenance, and scaling as the environment changes. In environments that are growing fast, are highly cloud-native, or have limited infrastructure operations capacity, agentless platforms deliver coverage without that overhead. This constraint shows up in practice more often than buyers expect: organizations that underestimate the cost of managing a collector deployment at scale frequently find that DSPM coverage lags the data estate, because new environments aren't connected promptly.</p>
             </div>
           </div>
         </div>
 
         <h2>Hybrid environments: where both architectures exist</h2>
 
-        <p>Most enterprise environments are hybrid: cloud-native workloads alongside on-premises infrastructure, with the balance shifting toward cloud over time but the on-premises data estate not disappearing. The coverage question in these environments is not which architecture wins — it is which architecture covers which layer.</p>
+        <p>Most enterprise environments are hybrid: cloud-native workloads alongside on-premises infrastructure, with the balance shifting toward cloud over time but the on-premises data estate not disappearing. The coverage question in these environments comes down to which architecture covers which layer, rather than which architecture wins outright.</p>
 
-        <p>The practical outcome in many hybrid environments is that organizations end up with both types of deployment: an agentless cloud-native platform covering the cloud and SaaS data estate, and an agent-based platform covering on-premises file servers and behavioral detection. This is not an anti-pattern. It is the acknowledgment that these are different coverage layers with different architectural requirements. The risk is when an organization acquires both without clearly scoping each to its layer — the result is redundant coverage in some areas and gaps in others.</p>
+        <p>The practical outcome in many hybrid environments is that organizations end up running both: an agentless cloud-native platform covering the cloud and SaaS data estate, and an agent-based platform covering on-premises file servers and behavioral detection. Running both is a reasonable acknowledgment that these are different coverage layers with different architectural requirements, not a sign that the procurement process went wrong somewhere. The actual risk is acquiring both without clearly scoping each to its layer, which produces redundant coverage in some areas and gaps in others.</p>
 
         <p>The coverage mapping worth establishing before platform selection: which data sources are in scope, how they break down between cloud-native and on-premises, and which of those require behavioral monitoring as distinct from classification and posture. The answers to those questions narrow the architecture decision significantly.</p>
 
         <h2>Where the market is heading</h2>
 
-        <p>The dominant direction is agentless. Most net-new DSPM deployments over the past three years have been in cloud-native environments where agentless architecture is the natural fit, and most pure-play DSPM platforms founded since 2019 are agentless. Varonis is the major exception: its architectural choice to use collectors is not a legacy constraint — it is the foundation for DDR and behavioral analytics capabilities that agentless platforms cannot replicate.</p>
+        <p>The dominant direction is agentless. Most net-new DSPM deployments over the past three years have been in cloud-native environments where agentless architecture is the natural fit, and most pure-play DSPM platforms founded since 2019 are agentless. Varonis is the major exception, and its architectural choice to use collectors reflects a deliberate design decision rather than a legacy constraint: that architecture is the foundation for the DDR and behavioral analytics capabilities that agentless platforms aren't built to replicate.</p>
 
         <p>Agent-based and collector architectures are not going away. As long as on-premises file servers, NAS environments, and legacy infrastructure hold significant sensitive data, and as long as behavioral threat detection remains a real requirement, collector-based platforms will cover the layer that agentless platforms cannot reach.</p>
 
-        <p style="font-size:var(--small); margin-top:32px;">Related: <a href="/comparisons/cyera-vs-varonis/">Cyera vs. Varonis</a> &nbsp;&middot;&nbsp; <a href="/landscape/">DSPM market landscape</a> &nbsp;&middot;&nbsp; <a href="/tools/architecture-fit/">Architecture fit tool</a> &nbsp;&middot;&nbsp; <a href="/guides/dspm-poc-evaluation/">How to run a DSPM POC</a></p>
+        <p style="font-size:var(--small); margin-top:32px;">Related: <a href="/comparisons/cyera-vs-varonis/">Cyera vs. Varonis</a> &nbsp;&middot;&nbsp; <a href="/landscape/">DSPM market landscape</a> &nbsp;&middot;&nbsp; <a href="/guides/how-to-run-a-dspm-poc/">How to run a DSPM POC</a></p>
 
+        <!-- Newsletter -->
         <div class="newsletter-block">
-          <span class="page-label">The Independent Defender</span>
-          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
           <div class="newsletter-form">
-            <input type="email" placeholder="your@email.com" aria-label="Email address">
-            <button type="button">Subscribe free</button>
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
           </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
         </div>
 
       </article>
@@ -159,8 +174,8 @@
 
   <footer>
     <div class="footer-inner">
-      <span class="page-label">DSPM Software</span>
-      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
     </div>
   </footer>
 

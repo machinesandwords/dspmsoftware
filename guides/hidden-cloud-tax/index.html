@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>The Hidden Cloud Tax of DSPM — Independent Guide | DSPM Software</title>
+  <meta name="description" content="Why full-estate DSPM re-scans spike cloud infrastructure bills, and how to build a delta-scanning architecture that only reads what actually changed.">
+  <link rel="canonical" href="https://dspmsoftware.com/guides/delta-scanning-architecture/">
+
+  <meta property="og:title" content="The Hidden Cloud Tax of DSPM | DSPM Software">
+  <meta property="og:description" content="How to build a delta-scanning architecture that only reads what changed, instead of re-scanning the full data estate on every cycle.">
+  <meta property="og:url" content="https://dspmsoftware.com/guides/delta-scanning-architecture/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Hidden Cloud Tax: Building Delta-Scanning Architectures for DSPM",
+    "description": "Why full-estate DSPM re-scans spike cloud infrastructure bills, and how to build a delta-scanning architecture that only reads what actually changed.",
+    "url": "https://dspmsoftware.com/guides/delta-scanning-architecture/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dspmsoftware.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "Delta-Scanning Architecture", "item": "https://dspmsoftware.com/guides/delta-scanning-architecture/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <script src="/config.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides/">Guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Delta-Scanning Architecture</span>
+        </nav>
+
+        <span class="page-label">Guide</span>
+        <h1>The Hidden Cloud Tax: Building Delta-Scanning Architectures for DSPM</h1>
+
+        <p class="lead">Vendors pitch frictionless, continuous, agentless scanning. What they don't put in the pitch deck: reading, classifying, and passing multi-terabyte data objects through a classification engine costs real cloud compute and inter-region egress. A naive full-estate re-scan every 24 hours can spike an infrastructure bill 15 to 25 percent before anyone on the security team understands why the cloud bill changed.</p>
+
+        <h2>Why full re-scans are the default, and why that's expensive</h2>
+
+        <p>Most DSPM platforms scan broadly because broad is simple to build and simple to sell. A re-scan of the entire data estate on a fixed schedule, every day or every few hours, doesn't require the platform to track what changed since last time. It just reads everything again. That simplicity is invisible to the buyer until the cloud bill arrives.</p>
+
+        <p>Classifying a bucket means reading its contents. Reading at petabyte scale, especially across regions or across cloud accounts, triggers real API call volume and, depending on the architecture, real egress charges. This cost is entirely separate from the DSPM subscription fee, and it scales with the size of the data estate and the frequency of scanning, not with how much of that data actually changed. An organization running a full re-scan nightly across a multi-region, multi-account environment is paying to re-read data that hasn't moved or changed in months, every single night.</p>
+
+        <h2>The delta-scanning alternative: only read what changed</h2>
+
+        <p>The architecture that solves this is straightforward in concept: stop re-reading everything, and only read what actually changed since the last scan. The mechanism is object-level storage event triggers wired to a lightweight hashing pipeline. Cloud storage services emit events when objects are created or modified, events like <code>s3:ObjectCreated</code> or the equivalent in other cloud providers. Subscribing a hashing function to those events means the system is notified the moment something changes, instead of having to go looking for changes on a fixed schedule.</p>
+
+        <p>That hashing function computes and stores a hash of each object in a lightweight state table, commonly something like DynamoDB given its low operational overhead at this scale. On each scan cycle, the DSPM tool is granted read access only to objects whose hash differs from what's recorded in the state table. Everything else is skipped, not because it's assumed safe, but because it's already been classified and hasn't changed since.</p>
+
+        <p>The practical effect: instead of granting a DSPM engine blanket read rights to re-index an entire estate on every cycle, the access pattern narrows to exactly the objects that are new or modified. Compute and egress costs scale with the rate of change in the data estate, not with its total size. For most organizations, the volume of genuinely new or modified data on any given day is a small fraction of the total estate, and the cost savings follow directly from that ratio.</p>
+
+        <h2>What the state table actually needs to track</h2>
+
+        <p>A minimal state table needs the object key, a content hash, a last-scanned timestamp, and a reference to the most recent classification result for that object. That's enough to answer the basic question of whether an object's content has changed since it was last classified.</p>
+
+        <p>What hash-only tracking misses is anything that isn't a content change. A permission change on an object, an ACL update that suddenly makes a previously private object publicly readable, doesn't touch the object's bytes and won't trigger a content-hash mismatch. But it is exactly the kind of posture change DSPM exists to catch. A delta-scanning architecture built purely around content hashing will silently miss this category of risk, because nothing about the object's content changed, only what's allowed to reach it.</p>
+
+        <p>The fix is tracking permission and ACL state alongside content hash, with its own change-detection path. Most cloud providers emit separate events for permission changes distinct from object writes, and those need their own trigger into the pipeline, evaluated independently from the content-hash comparison.</p>
+
+        <h2>Where this breaks if built naively</h2>
+
+        <p>Treating delta-scanning as purely content-triggered, and not also wiring in permission and ACL change events, is the most common gap. It produces an architecture that looks complete, passes initial testing against content modifications, and then misses the exact class of exposure, a bucket quietly becoming public, that matters most.</p>
+
+        <p>Cross-account copies are a second failure point. When an object is copied from one account into another using an assumed role, the event behavior can differ from a same-account write, and depending on how the pipeline is wired, the destination account's copy of the object may not reliably fire the expected creation event in a way the hashing pipeline picks up. An architecture tested only against single-account writes can have a blind spot here that doesn't surface until an actual cross-account data movement happens.</p>
+
+        <p>State table drift is the quieter, longer-term risk. If the hashing pipeline itself fails, an event gets dropped, a Lambda function errors out silently, the state table falls out of sync with reality without anyone noticing immediately. The system continues operating as though everything is current, because nothing in the basic architecture distinguishes between "no changes happened" and "we stopped detecting changes." A periodic reconciliation pass, a slower, lower-frequency full comparison between the state table and actual object inventory, is the necessary backstop against this kind of silent drift. Without it, a delta-scanning architecture can degrade gradually and invisibly until a security review discovers objects that haven't actually been classified in months despite the dashboard showing continuous coverage.</p>
+
+        <div class="callout">
+          <span class="callout-label">Where this fits</span>
+          <p>The <a href="/landscape/">landscape page</a> names this directly: classifying data requires reading it, and reading terabytes of cloud storage generates real compute and egress charges most procurement conversations don't budget for. Delta-scanning is the practitioner-level architecture that addresses that named gap directly, rather than treating it as an unavoidable cost of doing DSPM at scale.</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>

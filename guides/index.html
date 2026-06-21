@@ -7,12 +7,12 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
 
-  <title>DSPM Evaluation Guides | DSPM Software</title>
-  <meta name="description" content="Practitioner guides for DSPM evaluation and deployment. Agentless vs. agent-based architectures, POC design, and buying framework guidance.">
+  <title>DSPM Guides — Architecture and Evaluation | DSPM Software</title>
+  <meta name="description" content="Independent technical guides on DSPM architecture, deployment, AI pipeline coverage, and evaluation. Practitioner-level depth, not vendor marketing.">
   <link rel="canonical" href="https://dspmsoftware.com/guides/">
 
-  <meta property="og:title" content="DSPM Evaluation Guides | DSPM Software">
-  <meta property="og:description" content="Practitioner guides for DSPM evaluation and deployment. Architecture choices, POC design, and buying frameworks.">
+  <meta property="og:title" content="DSPM Guides — Architecture and Evaluation | DSPM Software">
+  <meta property="og:description" content="Independent technical guides on DSPM architecture, deployment, and evaluation. Practitioner-level depth.">
   <meta property="og:url" content="https://dspmsoftware.com/guides/">
   <meta property="og:type" content="website">
 
@@ -26,21 +26,89 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "DSPM Guides",
+    "description": "Independent technical guides on DSPM architecture, deployment, and evaluation.",
+    "url": "https://dspmsoftware.com/guides/",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "url": "https://dspmsoftware.com/guides/agentless-vs-agent-based/", "name": "Agentless vs. Agent-Based DSPM" },
+      { "@type": "ListItem", "position": 2, "url": "https://dspmsoftware.com/guides/zero-trust-scanning-boundaries/", "name": "Hardening the Side-Scanning Trust Loop" },
+      { "@type": "ListItem", "position": 3, "url": "https://dspmsoftware.com/guides/delta-scanning-architecture/", "name": "The Hidden Cloud Tax: Delta-Scanning Architecture" },
+      { "@type": "ListItem", "position": 4, "url": "https://dspmsoftware.com/guides/rag-pipeline-data-interception/", "name": "Defending the Vector Boundary in RAG Pipelines" },
+      { "@type": "ListItem", "position": 5, "url": "https://dspmsoftware.com/guides/risk-proportional-session-lifetimes/", "name": "Risk-Proportional Session Lifetimes" },
+      { "@type": "ListItem", "position": 6, "url": "https://dspmsoftware.com/guides/sizing-a-dspm-deployment/", "name": "Sizing a DSPM Deployment" },
+      { "@type": "ListItem", "position": 7, "url": "https://dspmsoftware.com/guides/how-to-run-a-dspm-poc/", "name": "How to Run a DSPM POC" }
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
   <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
   <script src="/config.js" defer></script>
+
+  <style>
+    .comparison-list { list-style: none; padding: 0; margin-bottom: 32px; }
+    .comparison-list li { border-bottom: var(--hairline); }
+    .comparison-list li:last-child { border-bottom: none; }
+    .comparison-list a {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .comparison-list a:hover .comparison-list-name { color: var(--accent); }
+    .comparison-list-body { flex: 1; }
+    .comparison-list-name { font-size: var(--small); font-weight: 700; margin-bottom: 2px; }
+    .comparison-list-desc { font-size: 12px; color: var(--mid); line-height: 1.5; }
+    .comparison-list-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .comparison-list-arrow { color: var(--border); font-size: 11px; padding-top: 2px; flex-shrink: 0; }
+    .comparison-list a:hover .comparison-list-arrow { color: var(--accent); }
+    .section-head {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 16px 0 8px;
+      border-bottom: 1px solid var(--charcoal);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-head::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+  </style>
 </head>
 <body>
 
   <header class="topbar">
     <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
     <div class="topbar-divider"></div>
-    <span class="topbar-tagline">independent guidance for DSPM buyers</span>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
     <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
   </header>
 
@@ -50,52 +118,127 @@
     </nav>
 
     <main class="main">
-      <div class="content">
+      <article class="content">
 
-        <div class="breadcrumb">
+        <nav class="breadcrumb">
           <a href="/">Home</a>
           <span class="breadcrumb-sep">/</span>
           <span>Guides</span>
-        </div>
+        </nav>
 
         <span class="page-label">Guides</span>
-        <h1>DSPM Evaluation Guides</h1>
+        <h1>DSPM Guides</h1>
 
-        <p class="lead">Practitioner guides for the decisions that come before the shortlist. Architecture tradeoffs, POC design, deployment models, and the questions that clarify requirements before a vendor conversation starts.</p>
+        <p class="lead">Architecture, deployment, and evaluation guidance written for practitioners who already know what DSPM is and need the implementation detail that doesn't show up in vendor pitch decks or analyst briefs. No vendor names, no marketing language — the engineering and procurement decisions underneath the category.</p>
 
-        <div class="card-grid">
-
-          <a href="/guides/agentless-vs-agent-based/" style="text-decoration:none;" class="card">
-            <div class="card-label">Architecture guide</div>
-            <div class="card-value" style="font-size:13px; font-weight:700; color:var(--charcoal); margin-bottom:4px;">Agentless vs. Agent-Based DSPM</div>
-            <div class="card-sub">The deployment model decision shapes vendor eligibility, deployment timeline, and ongoing coverage. What each architecture gets right, where each struggles, and which requirements tip the decision.</div>
-          </a>
-
-          <a href="/guides/dspm-poc-evaluation/" style="text-decoration:none;" class="card">
-            <div class="card-label">Evaluation guide</div>
-            <div class="card-value" style="font-size:13px; font-weight:700; color:var(--charcoal); margin-bottom:4px;">How to Run a DSPM POC</div>
-            <div class="card-sub">Most DSPM POCs fail to test the things that matter. What to evaluate, how to scope the data set, and the questions that differentiate platforms before you commit.</div>
-          </a>
-
+        <div class="section-intro">
+          <p>Use the <a href="/tools/vendor-comparison/">vendor comparison tool</a> to filter the full market, and the <a href="/comparisons/">head-to-head comparisons</a> once you have a shortlist. These guides are for the architecture and process decisions that apply regardless of which platform you choose.</p>
         </div>
 
+        <!-- Deployment architecture -->
+        <div class="section-head" style="margin-top:32px;">Deployment architecture</div>
+        <ul class="comparison-list">
+          <li>
+            <a href="/guides/agentless-vs-agent-based/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Architecture guide</span>
+                <div class="comparison-list-name">Agentless vs. Agent-Based DSPM</div>
+                <div class="comparison-list-desc">The deployment model decision that constrains the entire vendor shortlist. What each architecture gets right, where each struggles, and the three requirements that actually determine which one fits.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/hardening-trust-loop/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Architecture guide</span>
+                <div class="comparison-list-name">Hardening the Side-Scanning Trust Loop</div>
+                <div class="comparison-list-desc">Agentless scanning requires a cross-account role with broad read access. How to constrain that role with IAM condition keys, scoped KMS policies, and an isolated inspection VPC.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/hidden-cloud-tax/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Architecture guide</span>
+                <div class="comparison-list-name">The Hidden Cloud Tax: Delta-Scanning Architecture</div>
+                <div class="comparison-list-desc">Full-estate re-scans generate real compute and egress costs beyond the subscription fee. How to build an event-triggered delta-scanning pipeline that only reads what changed.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- AI and identity -->
+        <div class="section-head">AI pipelines and identity</div>
+        <ul class="comparison-list">
+          <li>
+            <a href="/guides/vector-boundary/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Architecture guide</span>
+                <div class="comparison-list-name">Defending the Vector Boundary in RAG Pipelines</div>
+                <div class="comparison-list-desc">Classification breaks the moment data becomes a vector embedding. How to build inline interception at the ingestion layer, before sensitive data reaches a RAG or agentic pipeline.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/data-classifcation/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Architecture guide</span>
+                <div class="comparison-list-name">Risk-Proportional Session Lifetimes</div>
+                <div class="comparison-list-desc">DSPM tools know what data is exposed. Identity tools know what credentials are active. How to wire the two together so token lifetime scales with the sensitivity of what's being accessed.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Procurement and evaluation -->
+        <div class="section-head">Procurement and evaluation</div>
+        <ul class="comparison-list">
+          <li>
+            <a href="/guides/sizing-dspm-deployment/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Evaluation guide</span>
+                <div class="comparison-list-name">Sizing a DSPM Deployment Before the Vendor Sizes It For You</div>
+                <div class="comparison-list-desc">DSPM pricing is consumption-based and unit definitions vary by vendor. How to build your own workload, data-volume, and seat-count model before the first sales call.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guides/dspm-poc-evaluation/">
+              <div class="comparison-list-body">
+                <span class="comparison-list-tag">Evaluation guide</span>
+                <div class="comparison-list-name">How to Run a DSPM POC</div>
+                <div class="comparison-list-desc">Most DSPM POCs test whether the platform can find sensitive data at all — every platform can. How to design a POC around the specific coverage gaps and accuracy requirements that actually differentiate vendors.</div>
+              </div>
+              <span class="comparison-list-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Newsletter -->
         <div class="newsletter-block">
-          <span class="page-label">The Independent Defender</span>
-          <p>Covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
           <div class="newsletter-form">
-            <input type="email" placeholder="your@email.com" aria-label="Email address">
-            <button type="button">Subscribe free</button>
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
           </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
         </div>
 
-      </div>
+      </article>
     </main>
   </div>
 
   <footer>
     <div class="footer-inner">
-      <span class="page-label">DSPM Software</span>
-      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
     </div>
   </footer>
 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>Hardening the Side-Scanning Trust Loop — Independent Guide | DSPM Software</title>
+  <meta name="description" content="Agentless DSPM requires a cross-account role with broad read access. How to constrain that role with IAM condition keys, scoped KMS policies, and an isolated inspection VPC so a compromised vendor control plane can't reach your data.">
+  <link rel="canonical" href="https://dspmsoftware.com/guides/zero-trust-scanning-boundaries/">
+
+  <meta property="og:title" content="Hardening the Side-Scanning Trust Loop | DSPM Software">
+  <meta property="og:description" content="How to constrain a DSPM vendor's cross-account scanning role so a compromised control plane can't reach your data.">
+  <meta property="og:url" content="https://dspmsoftware.com/guides/zero-trust-scanning-boundaries/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hardening the Side-Scanning Trust Loop: Zero-Trust Boundaries for Cross-Account DSPM Access",
+    "description": "Agentless DSPM requires a cross-account role with broad read access. How to constrain that role with IAM condition keys, scoped KMS policies, and an isolated inspection VPC.",
+    "url": "https://dspmsoftware.com/guides/zero-trust-scanning-boundaries/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dspmsoftware.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "Zero-Trust Scanning Boundaries", "item": "https://dspmsoftware.com/guides/zero-trust-scanning-boundaries/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <script src="/config.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides/">Guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Zero-Trust Scanning Boundaries</span>
+        </nav>
+
+        <span class="page-label">Guide</span>
+        <h1>Hardening the Side-Scanning Trust Loop: Zero-Trust Boundaries for Cross-Account DSPM Access</h1>
+
+        <p class="lead">Agentless scanning requires granting a DSPM vendor a cross-account IAM role with broad read permissions, things like <code>s3:GetObject</code> and <code>kms:Decrypt</code> across the resources it's meant to classify. That role is the entire architecture's trust boundary. If the vendor's SaaS control plane is ever compromised, an attacker doesn't need to breach your environment directly. They can use that already-trusted pathway to exfiltrate your data footprint through credentials you granted voluntarily. The fix isn't refusing to grant the role. It's constraining what that role can actually do, even in the worst case where the credentials themselves are no longer trustworthy.</p>
+
+        <h2>Why the trust loop exists in the first place</h2>
+
+        <p>Agentless architecture is the dominant deployment model in DSPM for a reason: it's fast to onboard, requires no infrastructure inside the customer's environment, and avoids the operational overhead of agents or collectors. The tradeoff is structural, not incidental. To classify data semantically, the platform needs to actually read it, which means the cross-account role has to carry read permissions broad enough to reach every data store the platform is meant to cover.</p>
+
+        <p>That's a meaningfully different risk profile from a typical third-party integration. A role with read access across your cloud accounts, decryption permissions on your KMS keys, is not a minor permission grant. It means a third-party vendor's control plane becomes a single point of failure for the confidentiality of your entire connected data estate. The convenience of agentless deployment and the size of that trust boundary are the same tradeoff, not two separate considerations.</p>
+
+        <h2>Constraining the role with IAM condition keys</h2>
+
+        <p>The first layer of hardening doesn't require changing the deployment model at all. It requires narrowing what the assumed role is allowed to do, even with valid credentials, using IAM condition keys attached to the trust policy and the resource policies the role can act against.</p>
+
+        <p><code>aws:SourceVpc</code> and <code>aws:PrincipalOrgID</code> are the two most directly useful condition keys for this purpose. Scoping the role's trust policy to only accept assumption requests originating from a known, expected network boundary, or restricting it to a specific AWS Organization, means that even if the vendor's credentials are hijacked, the assumed role cannot be exercised from an arbitrary network the attacker controls. The credential alone is no longer sufficient; the request also has to originate from where it's expected to originate.</p>
+
+        <p>Scoped KMS key policies do the equivalent work at the decryption layer. Rather than granting the vendor's role blanket <code>kms:Decrypt</code> permission across every key in the account, the key policy should explicitly enumerate which keys the role can use, and ideally constrain that further with the same source-VPC or organization conditions. A hijacked role that can only decrypt against a narrow, known set of keys is a contained incident. A hijacked role with blanket KMS access across the account is a catastrophic one, and the difference between those two outcomes is entirely a function of how the policy was scoped at setup, not anything the vendor controls after the fact.</p>
+
+        <h2>The isolated inspection VPC pattern</h2>
+
+        <p>The more thorough version of this architecture goes further than constraining the role and changes where the actual payload processing happens. Rather than allowing the vendor's SaaS control plane to pull data out to its own infrastructure for classification, the pattern is to run localized, single-tenant worker nodes inside an isolated enterprise inspection VPC that the organization controls.</p>
+
+        <p>In this model, the vendor's orchestration layer can still direct what gets scanned and receive classification results back, but the actual decryption and classification payload processing happens entirely within the organization's own network perimeter. The data being classified never has to leave the customer's environment to be read by the vendor's infrastructure, even momentarily. This is a meaningfully stronger posture than relying on IAM conditions alone, because it removes the vendor's infrastructure from the data path entirely rather than just narrowing what it's permitted to touch.</p>
+
+        <p>This pattern is also the most direct, concrete artifact to bring into a third-party risk assessment. Where a generic agentless deployment requires a security team to accept the vendor's control plane as a trusted extension of the environment, an isolated inspection VPC with locally-running worker nodes gives the assessment something specific to point to: here is exactly where classification happens, and it isn't on infrastructure we don't control.</p>
+
+        <h2>Where this breaks if done halfway</h2>
+
+        <p>Over-broad KMS grants are the most common gap. A team implements source-VPC conditions on the IAM trust policy, treats that as the hardening work complete, and leaves the KMS key policy granting decrypt access across every key in the account. The IAM condition narrows who can assume the role; it does nothing to narrow what the role can decrypt once assumed. Both layers need to be scoped, not just one.</p>
+
+        <p>Condition keys that don't cover all access paths are a second failure mode. If the vendor's integration uses more than one entry point, a primary scanning role plus a separate role for a specific service like Snowflake or a data warehouse connector, and the condition-key hardening is only applied to the first, the second role becomes the unguarded path into the same data. Every role the vendor is granted needs the same scoping discipline, not just the one that was top of mind during the original security review.</p>
+
+        <p>Treating the inspection VPC as a checkbox rather than verifying actual data flow is the subtler failure. Standing up an inspection VPC and pointing the vendor's documentation at it satisfies an audit requirement on paper. Whether the architecture is actually doing what it claims, whether payload processing genuinely never leaves the VPC, versus the VPC being a pass-through that still ships data to vendor infrastructure for the actual classification step, requires verifying the data flow directly rather than taking the integration's existence as proof of the boundary.</p>
+
+        <div class="callout">
+          <span class="callout-label">Where this fits</span>
+          <p>The <a href="/landscape/">landscape page</a> names this directly: agentless access is not access-free, and a compromise of a DSPM vendor's control plane creates a blast radius across the entire connected data estate. This guide is the architecture-level answer to that named risk — the specific policy and infrastructure patterns that turn a broad, implicit trust grant into a constrained, verifiable one.</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>
