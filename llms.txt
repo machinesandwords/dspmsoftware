@@ -1,0 +1,36 @@
+# DSPM Software
+
+An independent buyer's guide to data security posture management software. Vendor-neutral analysis of DSPM platforms, market structure, and evaluation frameworks for enterprise security and governance buyers. No sponsored content. No affiliate arrangements.
+
+## Pages
+
+- [Home](https://dspmsoftware.com/): Overview of the DSPM market and guide to independent vendor analysis, evaluation frameworks, and market coverage on this site.
+- [Why DSPM](https://dspmsoftware.com/why/): The case for treating unclassified data as untrustworthy data, and why classification is the prerequisite for every downstream data security control.
+- [Subscribe](https://dspmsoftware.com/subscribe/): Subscribe to The Independent Defender, a twice-monthly vendor-neutral newsletter covering the DSPM and enterprise data security market.
+- [DSPM Market Landscape](https://dspmsoftware.com/landscape/): How the DSPM market is structured — vendor categories, execution model differences, and architectural fault lines that determine platform fit.
+- [Vendor Index](https://dspmsoftware.com/landscape/vendor-index/): Every significant DSPM platform organized by architectural category: cloud-native pure-plays, CNAPP-integrated, legacy data security, hyper-scale cloud, and outliers.
+- [Market Direction](https://dspmsoftware.com/landscape/market-direction/): Where the DSPM category is heading — identity correlation, real-time detection, AI pipeline coverage, and what those shifts mean for a purchase made today.
+- [Vendor Comparison Tool](https://dspmsoftware.com/landscape/vendor-comparison/): Interactive filter to compare 20 DSPM vendors by execution model, deployment architecture, data coverage, and AI pipeline support.
+- [Guides](https://dspmsoftware.com/guides/): Index of independent technical guides covering DSPM architecture, deployment decisions, and evaluation methodology.
+- [Agentless vs. Agent-Based DSPM](https://dspmsoftware.com/guides/agentless-vs-agent-based/): Architecture decision guide covering the trade-offs between agentless API-based and agent or collector deployment models.
+- [Hardening Cross-Account Scanning Trust](https://dspmsoftware.com/guides/hardening-trust-loop/): How to constrain a DSPM vendor's cross-account IAM role with condition keys, scoped KMS policies, and an isolated inspection VPC to limit blast radius if the vendor's control plane is compromised.
+- [The Hidden Cloud Tax of DSPM](https://dspmsoftware.com/guides/hidden-cloud-tax/): Why full-estate re-scans spike cloud infrastructure costs, and how to build a delta-scanning architecture that only reads what actually changed.
+- [Defending the Vector Boundary in RAG Pipelines](https://dspmsoftware.com/guides/vector-boundary/): Why data classification breaks the moment content becomes a vector embedding, and how to build inline interception at the RAG ingestion layer before sensitive data reaches the retrieval system.
+- [Data Classification and Token Lifetime](https://dspmsoftware.com/guides/data-classification/): How to build risk-proportional session lifetimes for non-human identities that shorten based on the sensitivity classification of the data being accessed.
+- [How to Run a DSPM POC](https://dspmsoftware.com/guides/dspm-poc-evaluation/): How to design a proof-of-concept evaluation around the coverage gaps, accuracy requirements, and integration scenarios that actually differentiate DSPM vendors.
+- [Sizing a DSPM Deployment](https://dspmsoftware.com/guides/sizing-dspm-deployment/): How to build your own workload, data-volume, and seat-count model before the first vendor call, so pricing comparisons are based on your actual footprint rather than vendor assumptions.
+- [Comparisons](https://dspmsoftware.com/comparisons/): Index of independent head-to-head comparisons between DSPM platforms covering specific trade-offs for buyers with a shortlist.
+- [Cyera vs. Varonis](https://dspmsoftware.com/comparisons/cyera-vs-varonis/): Direct comparison of Cyera and Varonis on cloud coverage, agentless architecture, behavioral analytics depth, and the implications of the Varonis 2026 on-premises product deadline.
+- [BigID vs. Securiti](https://dspmsoftware.com/comparisons/bigid-vs-securiti/): Direct comparison of BigID and Securiti on connector breadth, AI governance capabilities, privacy operations, and the impact of the Veeam acquisition on Securiti's roadmap.
+- [Sentra vs. Cyera](https://dspmsoftware.com/comparisons/sentra-vs-cyera/): Direct comparison of Sentra and Cyera on cloud-native DSPM positioning, data lineage, deployment friction, and vendor scale for enterprise buyers.
+- [Varonis vs. Netwrix](https://dspmsoftware.com/comparisons/varonis-vs-netwrix/): Comparison of Varonis and Netwrix for organizations with on-premises data estates and hybrid environments facing the Varonis 2026 product deadline.
+- [Wiz DSPM vs. Standalone DSPM](https://dspmsoftware.com/comparisons/wiz-dspm-vs-standalone/): Analysis of CNAPP-integrated DSPM through the Wiz Security Graph versus standalone DSPM platforms, covering when integration provides real value and when it limits coverage.
+- [Cyera Review](https://dspmsoftware.com/vendors/cyera/): Independent analysis of Cyera's cloud-native DSPM platform covering AI-native classification, shadow data discovery, and environment fit.
+- [Varonis Review](https://dspmsoftware.com/vendors/varonis/): Independent analysis of Varonis covering behavioral analytics, data detection and response, hybrid estate depth, and the 2026 on-premises product transition.
+- [BigID Review](https://dspmsoftware.com/vendors/bigid/): Independent analysis of BigID covering connector breadth, data intelligence capabilities, privacy operations, and DSAR automation.
+- [Sentra Review](https://dspmsoftware.com/vendors/sentra/): Independent analysis of Sentra covering cloud-native DSPM, data lineage and business context mapping, and fit for mid-market cloud-first environments.
+- [Symmetry Systems DataGuard Review](https://dspmsoftware.com/vendors/symmetry-systems/): Independent analysis of Symmetry Systems DataGuard, a graph-based identity-centric DSPM platform designed for Zero Trust programs and data sovereignty requirements.
+- [Wiz DSPM Review](https://dspmsoftware.com/vendors/wiz/): Independent analysis of Wiz's integrated DSPM capability, covering how data security works inside the Wiz Security Graph and when CNAPP-integrated DSPM is the right choice.
+- [Securiti Review](https://dspmsoftware.com/vendors/securiti/): Independent analysis of Securiti covering AI governance, privacy program management, consent management, and the Veeam acquisition implications.
+- [Concentric AI Review](https://dspmsoftware.com/vendors/concentric-ai/): Independent analysis of Concentric AI's Semantic Intelligence platform for autonomous classification of unstructured data.
+- [DSPM Tools](https://dspmsoftware.com/tools/): Index of interactive tools for DSPM buyers covering scan cost modeling, architecture fit assessment, blast radius analysis, RAG sanitization, and findings prioritization.

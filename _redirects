@@ -1,0 +1,11 @@
+# Redirects for nav.js canonical URL mismatches
+# These routes appear in nav.js but files live at different paths
+
+/guides/zero-trust-scanning-boundaries/     /guides/hardening-trust-loop/              301
+/guides/delta-scanning-architecture/        /guides/hidden-cloud-tax/                  301
+/guides/rag-pipeline-data-interception/     /guides/vector-boundary/                   301
+/guides/risk-proportional-session-lifetimes/ /guides/data-classification/               301
+/guides/how-to-run-a-dspm-poc/             /guides/dspm-poc-evaluation/               301
+/guides/sizing-a-dspm-deployment/          /guides/sizing-dspm-deployment/             301
+/tools/vendor-comparison/                  /landscape/vendor-comparison/               301
+/tools/nhi-blast-radius-matrix/            /tools/blast-radius-matrix/                 301

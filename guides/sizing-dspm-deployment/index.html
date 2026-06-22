@@ -1,78 +1,157 @@
-/**
- * nav.js — Shared sidebar navigation
- * dspmsoftware.com
- * Injected into every page. Edit once, updates everywhere.
- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
 
-(function() {
-  const nav = `
-    <div class="nav-section">
-      <div class="nav-section-label">Why</div>
-      <a href="/why/" class="nav-item depth-0">The data you trust</a>
-    </div>
+  <title>Sizing a DSPM Deployment Before the Vendor Sizes It — Independent Guide | DSPM Software</title>
+  <meta name="description" content="DSPM pricing is consumption-based and unit definitions vary by vendor. How to build your own workload, data-volume, and seat-count model before the first sales call.">
+  <link rel="canonical" href="https://dspmsoftware.com/guides/sizing-dspm-deployment/">
 
-    <div class="nav-divider"></div>
+  <meta property="og:title" content="Sizing a DSPM Deployment Before the Vendor Sizes It | DSPM Software">
+  <meta property="og:description" content="How to build your own footprint model — workloads, data volume, seat count — before comparing DSPM vendor quotes.">
+  <meta property="og:url" content="https://dspmsoftware.com/guides/sizing-a-dspm-deployment/">
+  <meta property="og:type" content="article">
 
-    <div class="nav-section">
-      <div class="nav-section-label">Landscape</div>
-      <a href="/landscape/" class="nav-item depth-0">Market overview</a>
-      <a href="/landscape/market-direction/" class="nav-item depth-1">&#9492; Market direction</a>
-      <a href="/landscape/vendor-index/" class="nav-item depth-1">&#9492; Vendor index</a>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="nav-section">
-      <div class="nav-section-label">Tools</div>
-      <a href="/tools/" class="nav-item depth-0">All tools</a>
-      <a href="/tools/vendor-comparison/" class="nav-item depth-1">&#9500; Vendor comparison</a>
-      <a href="/tools/architecture-fit/" class="nav-item depth-1">&#9492; Architecture fit</a>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="nav-section">
-      <div class="nav-section-label">Comparisons</div>
-      <a href="/comparisons/" class="nav-item depth-0">All comparisons</a>
-      <a href="/comparisons/cyera-vs-varonis/" class="nav-item depth-1">&#9500; Cyera vs. Varonis</a>
-      <a href="/comparisons/bigid-vs-securiti/" class="nav-item depth-1">&#9500; BigID vs. Securiti</a>
-      <a href="/comparisons/sentra-vs-cyera/" class="nav-item depth-1">&#9500; Sentra vs. Cyera</a>
-      <a href="/comparisons/wiz-dspm-vs-standalone/" class="nav-item depth-1">&#9500; Wiz vs. Standalone</a>
-      <a href="/comparisons/varonis-vs-netwrix/" class="nav-item depth-1">&#9500; Varonis vs. Netwrix</a>
-      <a href="/comparisons/" class="nav-item depth-1">&#9492; more</a>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="nav-section">
-      <div class="nav-section-label">Guides</div>
-      <a href="/guides/" class="nav-item depth-0">All guides</a>
-      <a href="/guides/rag-pipeline-data-interception/" class="nav-item depth-1">&#9500; Vector boundary in RAG pipelines</a>
-      <a href="/guides/risk-proportional-session-lifetimes/" class="nav-item depth-1">&#9500; Risk-proportional session lifetimes</a>
-      <a href="/guides/delta-scanning-architecture/" class="nav-item depth-1">&#9500; Delta-scanning architecture</a>
-      <a href="/guides/zero-trust-scanning-boundaries/" class="nav-item depth-1">&#9500; Zero-trust scanning boundaries</a>
-      <a href="/guides/sizing-a-dspm-deployment/" class="nav-item depth-1">&#9492; Sizing a DSPM deployment</a>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="nav-section">
-      <a href="/subscribe/" class="nav-item depth-0 nav-subscribe">Subscribe &rarr;</a>
-    </div>
-  `;
-
-  const container = document.getElementById('sidebar-nav');
-  if (container) {
-    container.innerHTML = nav;
-
-    const path = window.location.pathname;
-    const links = container.querySelectorAll('a.nav-item');
-    links.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href === path || (href !== '/' && path.startsWith(href))) {
-        link.classList.add('active');
-      }
-    });
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Sizing a DSPM Deployment Before the Vendor Sizes It For You",
+    "description": "DSPM pricing is consumption-based and unit definitions vary by vendor. How to build your own workload, data-volume, and seat-count model before the first sales call.",
+    "url": "https://dspmsoftware.com/guides/sizing-a-dspm-deployment/",
+    "datePublished": "2026-06-20",
+    "dateModified": "2026-06-20",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
   }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dspmsoftware.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "Sizing a DSPM Deployment", "item": "https://dspmsoftware.com/guides/sizing-a-dspm-deployment/" }
+    ]
+  }
+  </script>
 
-})();
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <script src="/config.js" defer></script>
+
+  <style>
+    .checklist { list-style: none; padding: 0; margin: 20px 0 28px; border: var(--hairline); }
+    .checklist li {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 16px; border-bottom: var(--hairline); font-size: var(--small);
+      color: var(--charcoal); line-height: 1.55;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '\25A1'; color: var(--accent); font-weight: 700; flex-shrink: 0; font-size: 14px; line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides/">Guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Sizing a DSPM Deployment</span>
+        </nav>
+
+        <span class="page-label">Guide</span>
+        <h1>Sizing a DSPM Deployment Before the Vendor Sizes It For You</h1>
+
+        <p class="lead">Most DSPM pricing is consumption-based: per workload, per terabyte scanned, per protected resource, per connected seat. The unit itself varies enough between vendors that the same environment can produce wildly different quotes, not because one vendor is more expensive in absolute terms, but because "workload" or "asset" means something different to each of them. Modeling your own footprint before the first sales call means negotiating from a number you trust, not one the vendor's calculator produced for you.</p>
+
+        <h2>Why "contact sales" pricing hides more than cost</h2>
+
+        <p>Most DSPM platforms don't publish per-unit pricing publicly. That's a known frustration in procurement, but it's not the only opacity problem. The unit being priced is also vendor-defined, and the definition is rarely made explicit until well into the sales process. A platform that prices by "workload" and a platform that prices by "protected resource" or "TB scanned" are using fundamentally different counting methods, and a buyer who only compares the headline per-unit rate without first understanding what's being counted is comparing numbers that don't actually mean the same thing.</p>
+
+        <p>This matters because the gap between "what I think my environment looks like" and "what the vendor's pricing model counts" is exactly where budget surprises happen after a contract is signed, not before. Building an independent model of your own footprint, before any vendor conversation, is what lets you translate a vendor's pricing structure into a real number rather than accepting their estimate at face value.</p>
+
+        <h2>The workload-count trap</h2>
+
+        <p>Workload-based pricing is common in CNAPP-embedded DSPM, and the definition of a workload is broader than most buyers initially assume. A "workload" typically includes virtual machines, containers, serverless functions, and managed services like databases and storage buckets, each counted separately rather than bundled. A single AWS account with 50 EC2 instances, 20 Lambda functions, 30 RDS databases, and 100 S3 buckets isn't 50 workloads, it's roughly 200, because each managed service and each storage resource counts on its own.</p>
+
+        <p>Scale that across a real multi-cloud environment, several hundred VMs, a few hundred containers, a hundred or more serverless functions, and a comparable number of managed databases, and a mid-size organization can land at 1,000 or more billable workloads without anyone having done the count beforehand. The gap between "we run a few hundred servers" and "we have a thousand billable workloads" is exactly the kind of surprise that shows up after the quote arrives, not before, if the counting exercise wasn't done independently first.</p>
+
+        <h2>The per-seat multiplier trap</h2>
+
+        <p>SASE- and SSE-embedded DSPM tends toward a different but equally non-obvious pricing structure: per-app-seat pricing, where the bill is a multiplication of users and connected applications rather than a flat per-user rate. A platform billing per app-seat at, for example, fifty dollars per seat per year sounds straightforward until the multiplication is worked through: 500 users connected to five SaaS applications under that model isn't 500 times the per-seat rate, it's 500 multiplied by 5 multiplied by the rate, because each user-to-app connection is its own billable seat.</p>
+
+        <p>That difference, a flat per-user calculation versus the actual per-connection calculation, can be a five-times gap between what a buyer assumed the bill would be and what it actually is. This kind of multiplier is rarely stated as plainly as "the bill is users times apps times rate." It's usually buried in a licensing footnote, and the only reliable way to catch it before signing is to ask the vendor directly for the exact formula and run your own numbers against it rather than trusting a ballpark estimate.</p>
+
+        <h2>Building your own footprint model before the call</h2>
+
+        <p>The inventory exercise doesn't need to be exhaustive on the first pass, but it needs to cover the dimensions that actually drive DSPM pricing across the different models in the market:</p>
+
+        <ul class="checklist">
+          <li>Cloud accounts and regions in scope — each account and cross-region footprint typically multiplies workload or asset counts under consumption pricing</li>
+          <li>Storage resources by type — buckets, databases, data warehouses, counted individually, not as one combined "storage" line item</li>
+          <li>Compute resources by type — VMs, containers, serverless functions, each counted separately under workload-based models</li>
+          <li>SaaS application connections per user — not just total app count, but the user-to-app relationship if evaluating a per-seat-per-app pricing model</li>
+          <li>Total data volume by sensitivity tier, not aggregate volume alone, since some pricing models scale with the data actually classified as sensitive rather than total bytes scanned</li>
+          <li>Rate of change in the environment — how much data and how many resources are created or modified per cycle, relevant for any platform pricing on scan frequency or classification volume rather than a flat connection fee</li>
+        </ul>
+
+        <p>Once that inventory exists, the next step is mapping it against each vendor's actual unit definition, obtained directly from the vendor rather than inferred from marketing material, and running your own numbers through their stated formula before the quote arrives. A buyer who shows up to a pricing conversation having already done this exercise is negotiating from a position of having priced the deal themselves, and is far less likely to be surprised by a multiplier or a workload definition buried in a contract appendix after signing.</p>
+
+        <div class="callout">
+          <span class="callout-label">Where this fits</span>
+          <p>The <a href="/landscape/">landscape page</a> names the infrastructure-cost side of this problem: classifying data generates real compute and egress charges beyond the subscription fee. This guide extends that same caution to the commercial side of the relationship — the pricing model itself can produce a multi-figure gap between expectation and invoice if the underlying unit definitions aren't modeled independently before the contract is signed.</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>DSPM Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>
