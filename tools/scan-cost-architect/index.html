@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Scan-Cost Architect | DSPM Software</title>
+  <meta name="description" content="Model the infrastructure cost gap between full-estate DSPM re-scans and event-driven delta scanning, based on your data volume, change rate, and scan frequency.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/scan-cost-architect/">
+
+  <meta property="og:title" content="DSPM Scan-Cost Architect | DSPM Software">
+  <meta property="og:description" content="Model the infrastructure cost gap between full re-scans and delta scanning for your environment.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/scan-cost-architect/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://dspmsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "Scan-Cost Architect", "item": "https://dspmsoftware.com/tools/scan-cost-architect/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .sca-layout { display:grid; grid-template-columns: 320px 1fr; gap:1px; background:var(--border); border:var(--hairline); margin:24px 0 8px; }
+    .sca-panel { background:var(--surface); padding:24px; }
+    .sca-field { margin-bottom:22px; }
+    .sca-field:last-child { margin-bottom:0; }
+    .sca-field-label { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+    .sca-field-name { font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--charcoal); }
+    .sca-field-value { font-size:13px; font-weight:700; color:var(--accent); font-variant-numeric: tabular-nums; }
+    .sca-field input[type=range] { width:100%; accent-color:var(--accent); }
+    .sca-field select {
+      width:100%; font-family:inherit; font-size:12px; padding:8px 10px; border:var(--hairline);
+      background:var(--bg); color:var(--charcoal); -webkit-appearance:none; appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 10px center;
+    }
+    .sca-field-desc { font-size:11px; color:var(--faint); margin-top:6px; line-height:1.5; }
+    .sca-toggle { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .sca-toggle input { accent-color:var(--accent); width:14px; height:14px; }
+    .sca-toggle span { font-size:12px; color:var(--charcoal); }
+
+    .sca-results { padding:24px; }
+    .sca-cost-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:var(--hairline); margin-bottom:24px; }
+    .sca-cost-card { background:var(--surface); padding:18px 20px; }
+    .sca-cost-card.delta { background:var(--accent-pale); }
+    .sca-cost-label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--mid); margin-bottom:6px; display:block; }
+    .sca-cost-card.delta .sca-cost-label { color:var(--accent); }
+    .sca-cost-value { font-size:26px; font-weight:700; color:var(--charcoal); line-height:1.1; }
+    .sca-cost-sub { font-size:11px; color:var(--mid); margin-top:4px; }
+
+    .sca-bar-wrap { margin-bottom:24px; }
+    .sca-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+    .sca-bar-row-label { width:90px; flex-shrink:0; font-size:11px; font-weight:700; color:var(--mid); text-transform:uppercase; letter-spacing:0.04em; }
+    .sca-bar-track { flex:1; height:22px; background:var(--bg); border:var(--hairline); position:relative; overflow:hidden; }
+    .sca-bar-fill { height:100%; background:var(--faint); transition:width 0.25s ease; }
+    .sca-bar-fill.delta { background:var(--accent); }
+    .sca-bar-amount { font-size:11px; font-weight:700; color:var(--charcoal); width:80px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; }
+
+    .sca-savings { border:2px solid var(--accent); padding:18px 20px; margin-bottom:20px; }
+    .sca-savings-label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:6px; }
+    .sca-savings-value { font-size:20px; font-weight:700; color:var(--charcoal); }
+    .sca-savings-sub { font-size:12px; color:var(--mid); margin-top:4px; line-height:1.5; }
+
+    .sca-vpc-note { font-size:12px; color:var(--charcoal); background:var(--bg); border:var(--hairline); padding:12px 16px; line-height:1.6; }
+    .sca-vpc-note strong { color:var(--accent); }
+
+    .sca-disclaimer { font-size:11px; color:var(--faint); margin-top:16px; line-height:1.6; }
+
+    @media (max-width:760px) {
+      .sca-layout { grid-template-columns:1fr; }
+      .sca-cost-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Scan-Cost Architect</span>
+        </nav>
+
+        <span class="page-label">Tool &mdash; Cost Model</span>
+        <h1>DSPM Scan-Cost Architect</h1>
+
+        <p class="section-intro">Model the infrastructure cost gap between a full-estate re-scan and an event-driven delta-scan architecture for your environment. Adjust the variables to match your estate and see where the breaking point sits.</p>
+
+        <div class="sca-layout">
+
+          <div class="sca-panel">
+
+            <div class="sca-field">
+              <div class="sca-field-label">
+                <span class="sca-field-name">Total data volume</span>
+                <span class="sca-field-value" id="val-volume">5 PB</span>
+              </div>
+              <input type="range" id="in-volume" min="0.1" max="50" step="0.1" value="5">
+              <div class="sca-field-desc">Total sensitive-eligible data across the estate, in petabytes.</div>
+            </div>
+
+            <div class="sca-field">
+              <div class="sca-field-label">
+                <span class="sca-field-name">Daily change rate</span>
+                <span class="sca-field-value" id="val-change">3%</span>
+              </div>
+              <input type="range" id="in-change" min="0.1" max="25" step="0.1" value="3">
+              <div class="sca-field-desc">Estimated percentage of total volume created or modified per day.</div>
+            </div>
+
+            <div class="sca-field">
+              <div class="sca-field-label">
+                <span class="sca-field-name">Cloud accounts in scope</span>
+                <span class="sca-field-value" id="val-accounts">12</span>
+              </div>
+              <input type="range" id="in-accounts" min="1" max="200" step="1" value="12">
+              <div class="sca-field-desc">More accounts generally means more API call overhead per scan cycle.</div>
+            </div>
+
+            <div class="sca-field">
+              <label class="sca-toggle">
+                <input type="checkbox" id="in-crossregion">
+                <span>Estate spans multiple regions or clouds</span>
+              </label>
+              <div class="sca-field-desc">Cross-region and cross-cloud reads typically add egress charges that same-region reads avoid.</div>
+            </div>
+
+            <div class="sca-field">
+              <div class="sca-field-label">
+                <span class="sca-field-name">Scan frequency</span>
+              </div>
+              <select id="in-frequency">
+                <option value="24">Daily</option>
+                <option value="6">Every 6 hours</option>
+                <option value="1">Hourly</option>
+                <option value="168">Weekly</option>
+              </select>
+              <div class="sca-field-desc">How often the platform re-evaluates the estate for posture changes.</div>
+            </div>
+
+          </div>
+
+          <div class="sca-results">
+
+            <div class="sca-cost-grid">
+              <div class="sca-cost-card">
+                <span class="sca-cost-label">Full re-scan / month</span>
+                <div class="sca-cost-value" id="out-full-cost">&mdash;</div>
+                <div class="sca-cost-sub" id="out-full-sub">&mdash;</div>
+              </div>
+              <div class="sca-cost-card delta">
+                <span class="sca-cost-label">Delta scan / month</span>
+                <div class="sca-cost-value" id="out-delta-cost">&mdash;</div>
+                <div class="sca-cost-sub" id="out-delta-sub">&mdash;</div>
+              </div>
+            </div>
+
+            <div class="sca-bar-wrap">
+              <div class="sca-bar-row">
+                <span class="sca-bar-row-label">Full scan</span>
+                <div class="sca-bar-track"><div class="sca-bar-fill" id="bar-full" style="width:100%"></div></div>
+                <span class="sca-bar-amount" id="bar-full-amount">&mdash;</span>
+              </div>
+              <div class="sca-bar-row">
+                <span class="sca-bar-row-label">Delta scan</span>
+                <div class="sca-bar-track"><div class="sca-bar-fill delta" id="bar-delta" style="width:0%"></div></div>
+                <span class="sca-bar-amount" id="bar-delta-amount">&mdash;</span>
+              </div>
+            </div>
+
+            <div class="sca-savings">
+              <span class="sca-savings-label">Estimated monthly savings from delta-scanning</span>
+              <div class="sca-savings-value" id="out-savings">&mdash;</div>
+              <div class="sca-savings-sub" id="out-savings-sub">&mdash;</div>
+            </div>
+
+            <div class="sca-vpc-note" id="out-vpc-note">&mdash;</div>
+
+            <p class="sca-disclaimer">Figures are illustrative, built on representative public cloud read and egress pricing, and intended to show the relative shape of the cost gap, not a quote. Actual costs depend on your specific cloud provider, storage class, region pairing, and DSPM vendor's scanning architecture. Model your own numbers using your cloud provider's pricing pages before budgeting. See the <a href="/guides/delta-scanning-architecture/">delta-scanning architecture guide</a> for the engineering pattern behind this model.</p>
+
+          </div>
+
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+ <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function() {
+    // Illustrative public-cloud-representative unit costs. Not tied to any single vendor's published pricing.
+    var READ_COST_PER_GB = 0.0025;     // representative blended GET/read + compute cost per GB processed
+    var EGRESS_COST_PER_GB = 0.02;     // representative cross-region/cross-cloud egress cost per GB
+    var API_CALL_COST_PER_1K_OBJECTS = 0.0045; // representative per-1000-object-call overhead
+    var AVG_OBJECT_SIZE_MB = 8;        // assumption for converting volume to approximate object counts
+
+    var volumeEl = document.getElementById('in-volume');
+    var changeEl = document.getElementById('in-change');
+    var accountsEl = document.getElementById('in-accounts');
+    var crossRegionEl = document.getElementById('in-crossregion');
+    var frequencyEl = document.getElementById('in-frequency');
+
+    function fmtCurrency(n) {
+      if (n >= 1000) return '$' + Math.round(n).toLocaleString('en-US');
+      return '$' + n.toFixed(2);
+    }
+    function fmtGB(n) {
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + ' PB';
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + ' TB';
+      return Math.round(n) + ' GB';
+    }
+
+    function compute() {
+      var volumePB = parseFloat(volumeEl.value);
+      var changePct = parseFloat(changeEl.value) / 100;
+      var accounts = parseInt(accountsEl.value, 10);
+      var crossRegion = crossRegionEl.checked;
+      var hoursPerCycle = parseInt(frequencyEl.value, 10);
+      var cyclesPerMonth = Math.round((24 / hoursPerCycle) * 30);
+
+      var volumeGB = volumePB * 1e6;
+      var objectsTotal = (volumeGB * 1024) / AVG_OBJECT_SIZE_MB;
+
+      // Full scan: reads the entire estate every cycle
+      var fullReadGBPerCycle = volumeGB;
+      var fullObjectsPerCycle = objectsTotal;
+
+      // Delta scan: reads only the changed fraction every cycle
+      var deltaReadGBPerCycle = volumeGB * changePct;
+      var deltaObjectsPerCycle = objectsTotal * changePct;
+
+      function cycleCost(readGB, objectCount) {
+        var readCost = readGB * READ_COST_PER_GB;
+        var egressCost = crossRegion ? readGB * EGRESS_COST_PER_GB : 0;
+        var apiCost = (objectCount / 1000) * API_CALL_COST_PER_1K_OBJECTS * (1 + accounts / 50);
+        return readCost + egressCost + apiCost;
+      }
+
+      var fullCostPerCycle = cycleCost(fullReadGBPerCycle, fullObjectsPerCycle);
+      var deltaCostPerCycle = cycleCost(deltaReadGBPerCycle, deltaObjectsPerCycle);
+
+      var fullCostMonth = fullCostPerCycle * cyclesPerMonth;
+      var deltaCostMonth = deltaCostPerCycle * cyclesPerMonth;
+
+      return {
+        fullCostMonth: fullCostMonth,
+        deltaCostMonth: deltaCostMonth,
+        fullReadGBPerCycle: fullReadGBPerCycle,
+        deltaReadGBPerCycle: deltaReadGBPerCycle,
+        cyclesPerMonth: cyclesPerMonth,
+        crossRegion: crossRegion,
+        savingsMonth: fullCostMonth - deltaCostMonth,
+        savingsPct: fullCostMonth > 0 ? ((fullCostMonth - deltaCostMonth) / fullCostMonth) * 100 : 0
+      };
+    }
+
+    function render() {
+      document.getElementById('val-volume').textContent = parseFloat(volumeEl.value).toFixed(1) + ' PB';
+      document.getElementById('val-change').textContent = parseFloat(changeEl.value).toFixed(1) + '%';
+      document.getElementById('val-accounts').textContent = accountsEl.value;
+
+      var r = compute();
+
+      document.getElementById('out-full-cost').textContent = fmtCurrency(r.fullCostMonth) + '/mo';
+      document.getElementById('out-full-sub').textContent = fmtGB(r.fullReadGBPerCycle) + ' read per cycle, ' + r.cyclesPerMonth + ' cycles/mo';
+
+      document.getElementById('out-delta-cost').textContent = fmtCurrency(r.deltaCostMonth) + '/mo';
+      document.getElementById('out-delta-sub').textContent = fmtGB(r.deltaReadGBPerCycle) + ' read per cycle, ' + r.cyclesPerMonth + ' cycles/mo';
+
+      var maxVal = Math.max(r.fullCostMonth, r.deltaCostMonth, 1);
+      document.getElementById('bar-full').style.width = (100 * r.fullCostMonth / maxVal) + '%';
+      document.getElementById('bar-delta').style.width = (100 * r.deltaCostMonth / maxVal) + '%';
+      document.getElementById('bar-full-amount').textContent = fmtCurrency(r.fullCostMonth);
+      document.getElementById('bar-delta-amount').textContent = fmtCurrency(r.deltaCostMonth);
+
+      document.getElementById('out-savings').textContent = fmtCurrency(r.savingsMonth) + '/mo (' + r.savingsPct.toFixed(0) + '%)';
+      document.getElementById('out-savings-sub').textContent = 'Estimated reduction in scanning-related compute and egress cost by reading only changed objects instead of the full estate on every cycle.';
+
+      var vpcNote = document.getElementById('out-vpc-note');
+      if (r.crossRegion) {
+        vpcNote.innerHTML = '<strong>Cross-region estate detected.</strong> Egress charges are the largest lever in this model. Running classification inside a customer-controlled inspection VPC (covered in the <a href="/guides/zero-trust-scanning-boundaries/">zero-trust scanning boundaries guide</a>) can eliminate cross-region egress entirely, on top of the delta-scanning savings shown above, since payload processing never crosses the region boundary.';
+      } else {
+        vpcNote.innerHTML = '<strong>Single-region or same-cloud estate.</strong> Egress is not currently a major factor in this model. If the estate expands into multiple regions or clouds, re-run this model with the cross-region toggle enabled, since egress costs typically become the dominant line item at that point.';
+      }
+    }
+
+    [volumeEl, changeEl, accountsEl, crossRegionEl, frequencyEl].forEach(function(el) {
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>

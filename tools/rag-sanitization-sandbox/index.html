@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>RAG Ingestion Sanitization Sandbox | DSPM Software</title>
+  <meta name="description" content="See why classification breaks at the vector boundary, and how an inline interception filter catches sensitive spans before a chunk is embedded. Interactive sandbox.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/rag-sanitization-sandbox/">
+
+  <meta property="og:title" content="RAG Ingestion Sanitization Sandbox | DSPM Software">
+  <meta property="og:description" content="Interactive sandbox showing why classification breaks at the embedding boundary and how inline interception catches sensitive spans first.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/rag-sanitization-sandbox/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://dspmsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "RAG Sanitization Sandbox", "item": "https://dspmsoftware.com/tools/rag-sanitization-sandbox/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .rss-notice { border:1px solid var(--accent); background:var(--accent-pale); padding:14px 16px; margin:20px 0 24px; }
+    .rss-notice .label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:6px; }
+    .rss-notice p { font-size:12px; color:var(--charcoal); margin:0; line-height:1.6; }
+
+    .rss-controls { display:grid; grid-template-columns: 1fr 140px 140px 200px auto; gap:12px; align-items:end; margin-bottom:20px; }
+    .rss-field label { display:block; font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--mid); margin-bottom:6px; }
+    .rss-field select {
+      width:100%; font-family:inherit; font-size:12px; padding:8px 10px; border:var(--hairline);
+      background:var(--bg); color:var(--charcoal); -webkit-appearance:none; appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 10px center;
+    }
+    .rss-run-btn {
+      font-family:inherit; font-size:12px; font-weight:700; background:var(--accent); color:#fff;
+      border:none; padding:9px 18px; cursor:pointer; white-space:nowrap;
+    }
+    .rss-run-btn:hover { background:var(--accent-dim); }
+
+    .rss-textarea {
+      width:100%; min-height:140px; font-family:'Space Mono', monospace; font-size:12px; line-height:1.6;
+      padding:14px 16px; border:var(--hairline); background:var(--surface); color:var(--charcoal); resize:vertical;
+    }
+    .rss-sample-btn {
+      font-family:inherit; font-size:11px; color:var(--accent); background:none; border:none;
+      cursor:pointer; text-decoration:underline; padding:0; margin-top:6px;
+    }
+
+    .rss-split { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:var(--hairline); margin-top:24px; }
+    .rss-side { background:var(--surface); padding:18px 20px; }
+    .rss-side-label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--mid); display:block; margin-bottom:4px; }
+    .rss-side-sub { font-size:11px; color:var(--faint); margin-bottom:14px; line-height:1.5; }
+    .rss-side.before .rss-side-label { color:#c0392b; }
+    .rss-side.after .rss-side-label { color:var(--accent); }
+
+    .rss-chunk { border:var(--hairline); margin-bottom:14px; }
+    .rss-chunk:last-child { margin-bottom:0; }
+    .rss-chunk-head { font-size:10px; font-weight:700; color:var(--faint); letter-spacing:0.04em; text-transform:uppercase; padding:8px 12px; border-bottom:var(--hairline); background:var(--bg); }
+    .rss-chunk-body { padding:12px; font-size:12px; line-height:1.7; color:var(--charcoal); }
+    .rss-flag { background:#faeaea; color:#c0392b; padding:1px 3px; font-weight:700; border-bottom:1px dotted #c0392b; }
+    .rss-redacted { background:var(--accent-pale); color:var(--accent); padding:1px 4px; font-weight:700; }
+    .rss-vector { font-family:'Space Mono', monospace; font-size:10.5px; color:var(--mid); line-height:1.8; word-break:break-all; padding:10px 12px; background:var(--bg); border-top:var(--hairline); }
+
+    .rss-empty { padding:32px; text-align:center; color:var(--faint); font-size:12px; border:var(--hairline); margin-top:24px; }
+
+    @media (max-width:760px) {
+      .rss-split { grid-template-columns:1fr; }
+      .rss-controls { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>RAG Sanitization Sandbox</span>
+        </nav>
+
+        <span class="page-label">Tool &mdash; Interactive Sandbox</span>
+        <h1>RAG Ingestion Sanitization Sandbox</h1>
+
+        <p class="section-intro">Paste or edit a sample document below to see why pattern-based classification has to run before a chunk is embedded, not after. The sandbox flags sensitive spans, redacts them inline, and shows what an embedding pipeline would actually ingest.</p>
+
+        <div class="rss-notice">
+          <span class="label">What this sandbox actually does</span>
+          <p>The classification step below runs real pattern matching in your browser, the same category of regex-based detection covered in the <a href="/guides/rag-pipeline-data-interception/">vector boundary guide</a>, applied to whatever text you provide. The "vector" representation shown after sanitization is an illustrative placeholder, a deterministic visual stand-in for what an embedding looks like, not output from an actual embedding model. No text you enter is sent anywhere; everything runs locally in this page.</p>
+        </div>
+
+        <textarea class="rss-textarea" id="rss-input" spellcheck="false"></textarea>
+        <button type="button" class="rss-sample-btn" id="rss-sample-btn">Load sample document</button>
+
+        <div class="rss-controls">
+          <div class="rss-field">
+            <label for="rss-chunksize">Chunk size (characters)</label>
+            <select id="rss-chunksize">
+              <option value="120">120</option>
+              <option value="220" selected>220</option>
+              <option value="400">400</option>
+            </select>
+          </div>
+          <div class="rss-field">
+            <label for="rss-overlap">Overlap</label>
+            <select id="rss-overlap">
+              <option value="0">None</option>
+              <option value="20" selected>20 chars</option>
+              <option value="50">50 chars</option>
+            </select>
+          </div>
+          <div class="rss-field">
+            <label for="rss-model">Target embedding model</label>
+            <select id="rss-model">
+              <option value="te3-small">text-embedding-3-small</option>
+              <option value="te3-large">text-embedding-3-large</option>
+              <option value="generic">Generic 768-dim model</option>
+            </select>
+          </div>
+          <div></div>
+          <button type="button" class="rss-run-btn" id="rss-run-btn">Run ingestion &rarr;</button>
+        </div>
+
+        <div id="rss-results"></div>
+
+        <p style="font-size:11px; color:var(--faint); margin-top:24px; line-height:1.6;">The chunk size, overlap, and embedding model selections shape how text is split for this demonstration; they do not change which embedding model actually classifies anything, since no real embedding is computed here. Detection logic below covers a small illustrative set of patterns (SSNs, emails, mock credit card numbers, a flagged internal codename). Production classifiers use far broader pattern libraries plus ML-based context classification, as covered in the <a href="/guides/rag-pipeline-data-interception/">vector boundary guide</a>.</p>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+ <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function() {
+    var SAMPLE_DOC = "Q3 customer escalation notes — internal use only.\n\nCustomer Jane Whitfield (account #88213) contacted support regarding a billing discrepancy. Her on-file SSN is 412-88-0193 for identity verification, and the refund was processed to the card ending in 4242 4242 4242 4242. Contact email on file: jane.whitfield@example-corp.com.\n\nThis ticket also references Project Hailstorm, the unreleased Q4 pricing restructure currently under internal review. Do not share pricing tier details externally before the embargo lifts on October 1.\n\nFollow-up scheduled with the account team to confirm resolution and close out the escalation.";
+
+    var PATTERNS = [
+      { type: 'SSN', re: /\b\d{3}-\d{2}-\d{4}\b/g },
+      { type: 'CREDIT_CARD', re: /\b(?:\d{4}[ -]?){3}\d{4}\b/g },
+      { type: 'EMAIL', re: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g },
+      { type: 'RESTRICTED_PROJECT', re: /\bProject\s+Hailstorm\b/g },
+      { type: 'ACCOUNT_NUMBER', re: /\baccount\s*#\s*\d+\b/gi }
+    ];
+
+    var input = document.getElementById('rss-input');
+    var sampleBtn = document.getElementById('rss-sample-btn');
+    var runBtn = document.getElementById('rss-run-btn');
+    var resultsEl = document.getElementById('rss-results');
+
+    sampleBtn.addEventListener('click', function() {
+      input.value = SAMPLE_DOC;
+    });
+    input.value = SAMPLE_DOC;
+
+    function escapeHtml(s) {
+      var div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function chunkText(text, size, overlap) {
+      var chunks = [];
+      var step = Math.max(size - overlap, 1);
+      for (var i = 0; i < text.length; i += step) {
+        var chunk = text.slice(i, i + size);
+        if (chunk.trim().length) chunks.push(chunk);
+        if (i + size >= text.length) break;
+      }
+      return chunks;
+    }
+
+    function findMatches(chunk) {
+      var matches = [];
+      PATTERNS.forEach(function(p) {
+        var re = new RegExp(p.re.source, p.re.flags);
+        var m;
+        while ((m = re.exec(chunk)) !== null) {
+          matches.push({ start: m.index, end: m.index + m[0].length, text: m[0], type: p.type });
+          if (m.index === re.lastIndex) re.lastIndex++;
+        }
+      });
+      matches.sort(function(a, b) { return a.start - b.start; });
+      var filtered = [];
+      var lastEnd = -1;
+      matches.forEach(function(m) {
+        if (m.start >= lastEnd) {
+          filtered.push(m);
+          lastEnd = m.end;
+        }
+      });
+      return filtered;
+    }
+
+    function renderBefore(chunk, matches) {
+      if (!matches.length) return escapeHtml(chunk);
+      var out = '';
+      var cursor = 0;
+      matches.forEach(function(m) {
+        out += escapeHtml(chunk.slice(cursor, m.start));
+        out += '<span class="rss-flag" title="' + m.type + '">' + escapeHtml(m.text) + '</span>';
+        cursor = m.end;
+      });
+      out += escapeHtml(chunk.slice(cursor));
+      return out;
+    }
+
+    function renderAfter(chunk, matches) {
+      if (!matches.length) return escapeHtml(chunk);
+      var out = '';
+      var cursor = 0;
+      matches.forEach(function(m) {
+        out += escapeHtml(chunk.slice(cursor, m.start));
+        out += '<span class="rss-redacted">[REDACTED:' + m.type + ']</span>';
+        cursor = m.end;
+      });
+      out += escapeHtml(chunk.slice(cursor));
+      return out;
+    }
+
+    function sanitizedText(chunk, matches) {
+      var out = '';
+      var cursor = 0;
+      matches.forEach(function(m) {
+        out += chunk.slice(cursor, m.start);
+        out += '[REDACTED:' + m.type + ']';
+        cursor = m.end;
+      });
+      out += chunk.slice(cursor);
+      return out;
+    }
+
+    // Deterministic, illustrative-only pseudo-vector display. Not a real embedding.
+    function pseudoVector(text, dims) {
+      var nums = [];
+      var seed = 0;
+      for (var i = 0; i < text.length; i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
+      for (var d = 0; d < dims; d++) {
+        seed = (seed * 1103515245 + 12345) >>> 0;
+        var v = ((seed % 2000) / 1000) - 1;
+        nums.push(v.toFixed(3));
+      }
+      return '[ ' + nums.join(', ') + ', ... ]';
+    }
+
+    runBtn.addEventListener('click', function() {
+      var text = input.value;
+      var size = parseInt(document.getElementById('rss-chunksize').value, 10);
+      var overlap = parseInt(document.getElementById('rss-overlap').value, 10);
+
+      if (!text.trim()) {
+        resultsEl.innerHTML = '<div class="rss-empty">Enter or load a document above, then run ingestion.</div>';
+        return;
+      }
+
+      var chunks = chunkText(text, size, overlap);
+
+      var beforeHtml = '<div class="rss-side before"><span class="rss-side-label">Before interception</span><div class="rss-side-sub">Raw chunks as they would enter the embedding pipeline, with sensitive spans flagged.</div>';
+      var afterHtml = '<div class="rss-side after"><span class="rss-side-label">After interception</span><div class="rss-side-sub">Sanitized chunks plus an illustrative vector placeholder, the form that actually reaches the vector database.</div>';
+
+      chunks.forEach(function(chunk, idx) {
+        var matches = findMatches(chunk);
+        var sanitized = sanitizedText(chunk, matches);
+
+        beforeHtml += '<div class="rss-chunk">' +
+          '<div class="rss-chunk-head">Chunk ' + (idx + 1) + ' of ' + chunks.length + (matches.length ? ' \u2014 ' + matches.length + ' flagged span' + (matches.length > 1 ? 's' : '') : ' \u2014 clean') + '</div>' +
+          '<div class="rss-chunk-body">' + renderBefore(chunk, matches) + '</div>' +
+        '</div>';
+
+        afterHtml += '<div class="rss-chunk">' +
+          '<div class="rss-chunk-head">Chunk ' + (idx + 1) + ' of ' + chunks.length + '</div>' +
+          '<div class="rss-chunk-body">' + renderAfter(chunk, matches) + '</div>' +
+          '<div class="rss-vector">' + pseudoVector(sanitized, 6) + '</div>' +
+        '</div>';
+      });
+
+      beforeHtml += '</div>';
+      afterHtml += '</div>';
+
+      resultsEl.innerHTML = '<div class="rss-split">' + beforeHtml + afterHtml + '</div>';
+    });
+
+    runBtn.click();
+  })();
+  </script>
+</body>
+</html>

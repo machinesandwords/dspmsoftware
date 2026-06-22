@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>NHI Blast-Radius Matrix | DSPM Software</title>
+  <meta name="description" content="Map non-human identities against the data classifications they can reach. Score blast radius by token persistence and auth method, and generate a risk-proportional session lifetime policy blueprint.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/nhi-blast-radius-matrix/">
+
+  <meta property="og:title" content="NHI Blast-Radius Matrix | DSPM Software">
+  <meta property="og:description" content="Score non-human identity blast radius by data sensitivity, token persistence, and auth method. Generate a risk-proportional session lifetime policy blueprint.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/nhi-blast-radius-matrix/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://dspmsoftware.com/tools/" },
+      { "@type": "ListItem", "position": 3, "name": "NHI Blast-Radius Matrix", "item": "https://dspmsoftware.com/tools/nhi-blast-radius-matrix/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js" defer></script>
+
+  <style>
+    .brm-form { display:grid; grid-template-columns: 1.3fr 1.3fr 1.1fr 1.1fr auto; gap:10px; align-items:end; border:var(--hairline); background:var(--surface); padding:18px; margin:24px 0 0; }
+    .brm-field label { display:block; font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--mid); margin-bottom:6px; }
+    .brm-field input, .brm-field select {
+      width:100%; font-family:inherit; font-size:12px; padding:8px 10px; border:var(--hairline);
+      background:var(--bg); color:var(--charcoal); -webkit-appearance:none; appearance:none;
+    }
+    .brm-field select {
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 10px center;
+    }
+    .brm-add-btn {
+      font-family:inherit; font-size:12px; font-weight:700; background:var(--accent); color:#fff;
+      border:none; padding:9px 16px; cursor:pointer; white-space:nowrap; letter-spacing:0.02em;
+    }
+    .brm-add-btn:hover { background:var(--accent-dim); }
+
+    .brm-table-wrap { margin:24px 0 8px; overflow-x:auto; }
+    .brm-table { width:100%; border-collapse:collapse; border:var(--hairline); }
+    .brm-table th {
+      font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--mid);
+      padding:10px 12px; text-align:left; border-bottom:var(--hairline); background:var(--bg); white-space:nowrap;
+    }
+    .brm-table td { font-size:12px; padding:10px 12px; border-bottom:var(--hairline); vertical-align:middle; }
+    .brm-table tbody tr:hover { background:var(--accent-pale); }
+    .brm-identity { font-weight:700; color:var(--charcoal); }
+    .brm-score-cell { display:flex; align-items:center; gap:8px; }
+    .brm-score-bar-track { width:60px; height:8px; background:var(--bg); border:var(--hairline); flex-shrink:0; }
+    .brm-score-bar-fill { height:100%; }
+    .brm-score-num { font-weight:700; font-variant-numeric: tabular-nums; width:24px; flex-shrink:0; }
+    .brm-band {
+      font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+      padding:2px 7px; border:1px solid; display:inline-block;
+    }
+    .brm-band.low { color:#3a7a4f; border-color:#3a7a4f; background:#eaf5ee; }
+    .brm-band.moderate { color:#9b7a1f; border-color:#9b7a1f; background:#fbf3df; }
+    .brm-band.high { color:#b5570a; border-color:#b5570a; background:#faf0e6; }
+    .brm-band.critical { color:#c0392b; border-color:#c0392b; background:#faeaea; }
+    .brm-remove { background:none; border:none; color:var(--faint); cursor:pointer; font-size:14px; padding:0 4px; }
+    .brm-remove:hover { color:#c0392b; }
+    .brm-empty { padding:24px; text-align:center; color:var(--faint); font-size:12px; border:var(--hairline); border-top:none; }
+
+    .brm-blueprint-section { margin-top:32px; }
+    .brm-blueprint-btn {
+      font-family:inherit; font-size:12px; font-weight:700; background:none; color:var(--accent);
+      border:1px solid var(--accent); padding:9px 18px; cursor:pointer; letter-spacing:0.02em;
+    }
+    .brm-blueprint-btn:hover { background:var(--accent-pale); }
+    .brm-blueprint-btn:disabled { color:var(--faint); border-color:var(--border); cursor:default; }
+    .brm-code {
+      display:none; background:#1d1d1b; color:#e8e8e6; font-family:'Space Mono', monospace; font-size:11.5px;
+      padding:18px 20px; margin-top:16px; overflow-x:auto; line-height:1.7; white-space:pre;
+    }
+    .brm-code.visible { display:block; }
+    .brm-copy-btn {
+      font-family:inherit; font-size:11px; font-weight:700; background:none; color:var(--accent);
+      border:var(--hairline); padding:6px 14px; cursor:pointer; margin-top:10px; letter-spacing:0.02em;
+    }
+    .brm-copy-btn:hover { border-color:var(--accent); }
+
+    @media (max-width:760px) {
+      .brm-form { grid-template-columns:1fr 1fr; }
+      .brm-add-btn { grid-column: span 2; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>NHI Blast-Radius Matrix</span>
+        </nav>
+
+        <span class="page-label">Tool &mdash; Risk Matrix</span>
+        <h1>NHI Blast-Radius Matrix</h1>
+
+        <p class="section-intro">Map the non-human identities in your environment against the data classifications they can reach. Each row scores blast radius from data sensitivity, token persistence, and authentication method, then the matrix generates a policy blueprint for risk-proportional session lifetimes.</p>
+
+        <form class="brm-form" id="brm-form">
+          <div class="brm-field">
+            <label for="f-identity">Identity name</label>
+            <input type="text" id="f-identity" placeholder="e.g. ci-pipeline-prod-deploy" required>
+          </div>
+          <div class="brm-field">
+            <label for="f-classification">Data classification reached</label>
+            <select id="f-classification">
+              <option value="public" data-weight="1">Public_Marketing</option>
+              <option value="internal" data-weight="2">Internal_Business</option>
+              <option value="confidential" data-weight="3" selected>Confidential_Customer</option>
+              <option value="financial" data-weight="4">Core_Financial_PII</option>
+              <option value="regulated" data-weight="5">Regulated_Health_PHI</option>
+            </select>
+          </div>
+          <div class="brm-field">
+            <label for="f-persistence">Token persistence</label>
+            <select id="f-persistence">
+              <option value="permanent" data-weight="4">Permanent / static credential</option>
+              <option value="longlived" data-weight="3" selected>Long-lived (&gt;24h)</option>
+              <option value="standard" data-weight="2">Standard session (1&ndash;12h)</option>
+              <option value="shortlived" data-weight="1">Short-lived (&lt;1h)</option>
+            </select>
+          </div>
+          <div class="brm-field">
+            <label for="f-auth">Auth method</label>
+            <select id="f-auth">
+              <option value="static" data-weight="3" selected>Static secret key</option>
+              <option value="oidc" data-weight="1">OIDC / workload identity federation</option>
+              <option value="role" data-weight="2">IAM role, no MFA equivalent</option>
+            </select>
+          </div>
+          <button type="submit" class="brm-add-btn">Add identity &rarr;</button>
+        </form>
+
+        <div class="brm-table-wrap">
+          <table class="brm-table" id="brm-table">
+            <thead>
+              <tr>
+                <th>Identity</th>
+                <th>Data classification</th>
+                <th>Token persistence</th>
+                <th>Auth method</th>
+                <th>Blast radius</th>
+                <th>Recommended TTL</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="brm-tbody"></tbody>
+          </table>
+          <div class="brm-empty" id="brm-empty">No identities mapped yet. Add at least one above to see blast radius scoring.</div>
+        </div>
+
+        <div class="brm-blueprint-section">
+          <button type="button" class="brm-blueprint-btn" id="brm-blueprint-btn" disabled>Generate policy blueprint &rarr;</button>
+          <pre class="brm-code" id="brm-code"></pre>
+          <button type="button" class="brm-copy-btn" id="brm-copy-btn" style="display:none;">Copy to clipboard</button>
+        </div>
+
+        <p style="font-size:11px; color:var(--faint); margin-top:20px; line-height:1.6;">Blast radius scoring is a relative comparison tool for prioritizing identities within your own environment, not an absolute risk metric. The generated blueprint is illustrative pseudocode for an AWS STS-style policy engine. Adapt it to your actual identity provider and cloud platform. See the <a href="/guides/risk-proportional-session-lifetimes/">risk-proportional session lifetimes guide</a> for the full architecture this matrix is built around.</p>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Independent Defender covers the DSPM market the way your vendors hope you won't. Twice monthly.</p>
+          <div class="newsletter-form">
+            <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+            <button type="button" id="nl-submit">Subscribe free</button>
+          </div>
+          <div id="nl-msg" style="display:none;font-size:11px;margin-top:8px;"></div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+ <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+  <script>
+  (function() {
+    var rows = [];
+    var rowId = 0;
+
+    var CLASS_LABELS = {
+      public: 'Public_Marketing',
+      internal: 'Internal_Business',
+      confidential: 'Confidential_Customer',
+      financial: 'Core_Financial_PII',
+      regulated: 'Regulated_Health_PHI'
+    };
+    var PERSIST_LABELS = {
+      permanent: 'Permanent / static',
+      longlived: 'Long-lived (>24h)',
+      standard: 'Standard (1\u201312h)',
+      shortlived: 'Short-lived (<1h)'
+    };
+    var AUTH_LABELS = {
+      static: 'Static secret key',
+      oidc: 'OIDC / federation',
+      role: 'IAM role, no MFA'
+    };
+
+    function weightOf(selectEl) {
+      return parseInt(selectEl.options[selectEl.selectedIndex].getAttribute('data-weight'), 10);
+    }
+
+    function scoreRow(classWeight, persistWeight, authWeight) {
+      // Max possible: 5 * 4 * 3 = 60. Normalize to 0-100.
+      var raw = classWeight * persistWeight * authWeight;
+      return Math.round((raw / 60) * 100);
+    }
+
+    function bandOf(score) {
+      if (score >= 70) return { label: 'Critical', cls: 'critical' };
+      if (score >= 45) return { label: 'High', cls: 'high' };
+      if (score >= 20) return { label: 'Moderate', cls: 'moderate' };
+      return { label: 'Low', cls: 'low' };
+    }
+
+    function bandColor(cls) {
+      var map = { critical: '#c0392b', high: '#b5570a', moderate: '#9b7a1f', low: '#3a7a4f' };
+      return map[cls];
+    }
+
+    function recommendedTTL(classification, persistence) {
+      if (classification === 'regulated' || classification === 'financial') {
+        return persistence === 'permanent' || persistence === 'longlived'
+          ? '15 min + step-up review'
+          : '15\u201330 min';
+      }
+      if (classification === 'confidential') {
+        return persistence === 'permanent' ? '1h + step-up review' : '1\u20134h';
+      }
+      return 'No change required';
+    }
+
+    var form = document.getElementById('brm-form');
+    var tbody = document.getElementById('brm-tbody');
+    var emptyEl = document.getElementById('brm-empty');
+    var blueprintBtn = document.getElementById('brm-blueprint-btn');
+    var codeEl = document.getElementById('brm-code');
+    var copyBtn = document.getElementById('brm-copy-btn');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var identityInput = document.getElementById('f-identity');
+      var classSelect = document.getElementById('f-classification');
+      var persistSelect = document.getElementById('f-persistence');
+      var authSelect = document.getElementById('f-auth');
+
+      var identity = identityInput.value.trim();
+      if (!identity) return;
+
+      rows.push({
+        id: rowId++,
+        identity: identity,
+        classification: classSelect.value,
+        classWeight: weightOf(classSelect),
+        persistence: persistSelect.value,
+        persistWeight: weightOf(persistSelect),
+        auth: authSelect.value,
+        authWeight: weightOf(authSelect)
+      });
+
+      identityInput.value = '';
+      identityInput.focus();
+      render();
+    });
+
+    function removeRow(id) {
+      rows = rows.filter(function(r) { return r.id !== id; });
+      render();
+    }
+
+    function render() {
+      tbody.innerHTML = '';
+      emptyEl.style.display = rows.length ? 'none' : 'block';
+      blueprintBtn.disabled = rows.length === 0;
+      codeEl.classList.remove('visible');
+      copyBtn.style.display = 'none';
+
+      rows.forEach(function(r) {
+        var score = scoreRow(r.classWeight, r.persistWeight, r.authWeight);
+        var band = bandOf(score);
+        var ttl = recommendedTTL(r.classification, r.persistence);
+        var color = bandColor(band.cls);
+
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="brm-identity">' + escapeHtml(r.identity) + '</td>' +
+          '<td>' + CLASS_LABELS[r.classification] + '</td>' +
+          '<td>' + PERSIST_LABELS[r.persistence] + '</td>' +
+          '<td>' + AUTH_LABELS[r.auth] + '</td>' +
+          '<td><div class="brm-score-cell">' +
+            '<div class="brm-score-bar-track"><div class="brm-score-bar-fill" style="width:' + score + '%;background:' + color + ';"></div></div>' +
+            '<span class="brm-score-num">' + score + '</span>' +
+            '<span class="brm-band ' + band.cls + '">' + band.label + '</span>' +
+          '</div></td>' +
+          '<td>' + ttl + '</td>' +
+          '<td><button type="button" class="brm-remove" data-id="' + r.id + '" title="Remove">&times;</button></td>';
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('.brm-remove').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          removeRow(parseInt(btn.getAttribute('data-id'), 10));
+        });
+      });
+    }
+
+    function escapeHtml(s) {
+      var div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    blueprintBtn.addEventListener('click', function() {
+      var lines = [];
+      lines.push('# Risk-proportional session lifetime policy blueprint');
+      lines.push('# Generated from the NHI Blast-Radius Matrix — adapt to your IdP and cloud platform');
+      lines.push('# Reference: /guides/risk-proportional-session-lifetimes/');
+      lines.push('');
+      rows.forEach(function(r) {
+        var score = scoreRow(r.classWeight, r.persistWeight, r.authWeight);
+        var band = bandOf(score);
+        var ttl = recommendedTTL(r.classification, r.persistence);
+        var needsStepUp = ttl.indexOf('step-up') !== -1;
+
+        lines.push('---');
+        lines.push('identity: "' + r.identity + '"');
+        lines.push('data_classification: "' + CLASS_LABELS[r.classification] + '"');
+        lines.push('current_token_persistence: "' + PERSIST_LABELS[r.persistence] + '"');
+        lines.push('current_auth_method: "' + AUTH_LABELS[r.auth] + '"');
+        lines.push('blast_radius_score: ' + score + '  # ' + band.label);
+        lines.push('');
+        lines.push('policy_rule:');
+        lines.push('  match:');
+        lines.push('    principal: "' + r.identity + '"');
+        lines.push('    resource_tag: "' + CLASS_LABELS[r.classification] + '"');
+        lines.push('  action:');
+        lines.push('    max_session_duration: "' + ttl.replace(' + step-up review', '') + '"');
+        if (needsStepUp) {
+          lines.push('    require_step_up_review: true');
+          lines.push('    step_up_trigger: "novel_access_pattern OR first_access_in_30d"');
+        }
+        lines.push('  on_violation:');
+        lines.push('    action: "deny_and_alert"');
+        lines.push('');
+      });
+      codeEl.textContent = lines.join('\n');
+      codeEl.classList.add('visible');
+      copyBtn.style.display = 'inline-block';
+    });
+
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(codeEl.textContent).then(function() {
+        copyBtn.textContent = 'Copied';
+        setTimeout(function() { copyBtn.textContent = 'Copy to clipboard'; }, 1500);
+      });
+    });
+
+    // Seed with one illustrative example row so the table isn't empty on load
+    rows.push({
+      id: rowId++,
+      identity: 'svc-analytics-etl',
+      classification: 'financial',
+      classWeight: 4,
+      persistence: 'permanent',
+      persistWeight: 4,
+      auth: 'static',
+      authWeight: 3
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>
