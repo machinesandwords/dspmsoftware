@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>DSPM Findings Prioritization Matrix | Data Security Posture Management Software</title>
+  <meta name="description" content="Score DSPM findings across five risk dimensions and generate a ranked remediation queue structured for handoff to remediation owners. Free tool, no vendor affiliation.">
+  <link rel="canonical" href="https://dspmsoftware.com/tools/findings-prioritization-matrix/">
+
+  <meta property="og:title" content="DSPM Findings Prioritization Matrix | Data Security Posture Management Software">
+  <meta property="og:description" content="Score DSPM findings across five risk dimensions and generate a ranked remediation queue. Free tool, no vendor affiliation.">
+  <meta property="og:url" content="https://dspmsoftware.com/tools/findings-prioritization-matrix/">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    :root {
+      --accent: #2E5CA6;
+      --accent-dim: #1F3F78;
+      --accent-pale: #E6ECF7;
+    }
+  </style>
+  <script src="/config.js" defer></script>
+  <script src="/nav.js" defer></script>
+
+  <style>
+    /* ---- Shared tool primitives ---- */
+    .tool-block {
+      border: var(--hairline);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .tool-block h2 {
+      font-size: var(--small);
+      font-weight: 700;
+      margin: 0 0 4px;
+      letter-spacing: 0.02em;
+    }
+    .tool-block .block-desc {
+      font-size: 12px;
+      color: var(--mid);
+      margin: 0 0 18px;
+      line-height: 1.55;
+    }
+
+    /* ---- Form ---- */
+    .form-field { margin-bottom: 14px; }
+    .form-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 3px;
+    }
+    .form-field .field-tip {
+      display: block;
+      font-size: 11px;
+      color: var(--faint);
+      margin-bottom: 4px;
+    }
+    .form-field input[type="text"],
+    .form-field select {
+      width: 100%;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      padding: 7px 8px;
+      border: var(--hairline);
+      background: var(--bg);
+      color: var(--charcoal);
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 26px;
+      cursor: pointer;
+    }
+    .form-field input[type="text"]:focus,
+    .form-field select:focus { outline: 1px solid var(--accent); }
+
+    .dim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 20px;
+    }
+    .dim-grid .form-field:nth-child(5) { grid-column: span 2; }
+    @media (max-width: 580px) {
+      .dim-grid { grid-template-columns: 1fr; }
+      .dim-grid .form-field:nth-child(5) { grid-column: span 1; }
+    }
+
+    /* ---- Buttons ---- */
+    .btn-primary {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-secondary {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      background: none;
+      color: var(--mid);
+      border: var(--hairline);
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { color: var(--charcoal); border-color: var(--charcoal); }
+    .btn-remove {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      background: none;
+      color: var(--faint);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+      flex-shrink: 0;
+    }
+    .btn-remove:hover { color: #c0392b; }
+
+    /* ---- Queue ---- */
+    .queue-list { list-style: none; padding: 0; margin: 0 0 16px; }
+    .queue-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: var(--hairline);
+      font-size: 12px;
+    }
+    .queue-item:last-child { border-bottom: none; }
+    .queue-item-name { font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .queue-item-meta { font-size: 11px; color: var(--mid); white-space: nowrap; flex-shrink: 0; }
+
+    /* ---- Results table ---- */
+    .results-wrap { overflow-x: auto; margin-bottom: 20px; }
+    .results-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .results-table th {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-align: left;
+      padding: 6px 10px 6px 0;
+      border-bottom: 1px solid var(--charcoal);
+      white-space: nowrap;
+    }
+    .results-table td {
+      padding: 10px 10px 10px 0;
+      border-bottom: var(--hairline);
+      vertical-align: top;
+    }
+    .results-table tr:last-child td { border-bottom: none; }
+    .td-rank { font-weight: 700; color: var(--mid); width: 20px; }
+    .td-name { font-weight: 700; min-width: 120px; }
+    .td-score { font-weight: 700; white-space: nowrap; }
+    .td-breakdown { font-size: 10px; color: var(--mid); white-space: nowrap; letter-spacing: 0.03em; }
+    .td-rationale { font-size: 11px; color: var(--mid); line-height: 1.55; min-width: 180px; }
+
+    /* ---- Tier badges ---- */
+    .tier-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 6px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .tier-p1 { color: #c0392b; border-color: #c0392b; }
+    .tier-p2 { color: #B5570A; border-color: #B5570A; }
+    .tier-p3 { color: var(--accent); border-color: var(--accent); }
+    .tier-p4 { color: var(--mid); border-color: var(--border); }
+
+    /* ---- Tier key ---- */
+    .tier-key {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tier-key-item { font-size: 11px; color: var(--mid); display: flex; align-items: center; gap: 6px; }
+
+    /* ---- Export gate ---- */
+    .export-banner {
+      background: var(--accent-pale);
+      border: var(--hairline);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .export-banner p { margin: 0; font-size: 12px; color: var(--charcoal); flex: 1; }
+    .export-form-wrap {
+      display: none;
+      padding: 14px 16px;
+      border: var(--hairline);
+      border-top: none;
+      background: var(--surface);
+    }
+    .export-form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .export-form-row input[type="email"] {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      padding: 7px 8px;
+      border: var(--hairline);
+      background: var(--bg);
+      color: var(--charcoal);
+      flex: 1;
+      min-width: 200px;
+      box-sizing: border-box;
+    }
+    .export-form-row input[type="email"]:focus { outline: 1px solid var(--accent); }
+    .export-form-note { font-size: 11px; color: var(--mid); margin: 0; line-height: 1.5; }
+
+    /* ---- Inline validation ---- */
+    .field-error { font-size: 11px; color: #c0392b; margin-top: 4px; display: none; }
+
+    /* ---- Tool intro meta ---- */
+    .tool-how {
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding: 14px;
+      border: var(--hairline);
+      background: var(--surface);
+    }
+    .tool-how strong { color: var(--charcoal); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">Data Security Posture Management <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for enterprise data security software buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/tools/">Tools</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Findings Prioritization Matrix</span>
+        </nav>
+
+        <span class="page-label">Tool</span>
+        <h1>DSPM Findings Prioritization Matrix</h1>
+
+        <p class="lead">Platform severity tiers are a starting point, not a remediation sequence. This tool scores each finding across five dimensions — data sensitivity, access exposure, store criticality, finding age, and downstream dependencies — and produces a ranked queue with per-finding rationale structured for handoff to remediation owners.</p>
+
+        <div class="tool-how">
+          <strong>How to use:</strong> Add findings one at a time using the form below. Select the option that best describes current state, not intended or projected state. Once you have your findings in the queue, generate the matrix. Export the ranked output as a CSV when you're ready to assign remediation work.
+        </div>
+
+        <!-- ============================================================
+             BLOCK 1: ADD A FINDING
+             ============================================================ -->
+        <div class="tool-block" id="input-block">
+          <h2>Add a finding</h2>
+          <p class="block-desc">Enter one data store at a time. The store name or identifier is for your reference only and does not affect scoring.</p>
+
+          <div class="form-field">
+            <label for="store-name">Store name or identifier</label>
+            <input type="text" id="store-name" placeholder="e.g. prod-customer-s3, analytics-redshift-main">
+            <span class="field-error" id="name-error">Please enter a store name or identifier.</span>
+          </div>
+
+          <div class="dim-grid" id="dim-grid">
+            <!-- Populated by renderDimFields() -->
+          </div>
+          <span class="field-error" id="dim-error" style="display:none; margin-top:-8px; margin-bottom:10px;">Please select a value for all five dimensions.</span>
+
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:4px;">
+            <button class="btn-primary" id="add-btn">Add finding</button>
+            <button class="btn-secondary" id="example-btn">Load example findings</button>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             BLOCK 2: FINDING QUEUE
+             ============================================================ -->
+        <div class="tool-block" id="queue-block" style="display:none;">
+          <h2>Finding queue <span id="queue-count" style="font-weight:400; color:var(--mid);"></span></h2>
+          <p class="block-desc">Review findings before generating the matrix. Remove any entered incorrectly and re-add them.</p>
+          <ul class="queue-list" id="queue-list"></ul>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button class="btn-primary" id="generate-btn">Generate prioritization matrix</button>
+            <button class="btn-secondary" id="clear-btn">Clear all</button>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             BLOCK 3: RESULTS
+             ============================================================ -->
+        <div class="tool-block" id="results-block" style="display:none;">
+          <h2>Prioritization matrix</h2>
+          <p class="block-desc">Ranked by composite score out of 25. Each finding's score reflects all five dimensions equally weighted. Rationale calls out the dimensions driving the highest scores.</p>
+
+          <div class="results-wrap">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Store</th>
+                  <th>Tier</th>
+                  <th>Score</th>
+                  <th>S E C A D</th>
+                  <th>Rationale</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+
+          <div class="tier-key">
+            <div class="tier-key-item"><span class="tier-badge tier-p1">P1</span> Remediate immediately</div>
+            <div class="tier-key-item"><span class="tier-badge tier-p2">P2</span> Remediate within 30 days</div>
+            <div class="tier-key-item"><span class="tier-badge tier-p3">P3</span> Remediate within 90 days</div>
+            <div class="tier-key-item"><span class="tier-badge tier-p4">P4</span> Next review cycle</div>
+          </div>
+          <p style="font-size:11px; color:var(--mid); margin-top:-10px; margin-bottom:20px;">S = Sensitivity &nbsp; E = Exposure &nbsp; C = Criticality &nbsp; A = Finding age &nbsp; D = Downstream dependencies</p>
+
+          <!-- Export gate -->
+          <div id="export-area">
+            <div class="export-banner" id="export-banner">
+              <p>Export this matrix as a CSV for handoff to remediation owners.</p>
+              <button class="btn-primary" id="export-cta">Download CSV</button>
+            </div>
+            <div class="export-form-wrap" id="export-form-wrap">
+              <div class="export-form-row">
+                <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email address">
+                <button class="btn-primary" id="nl-submit">Send and download</button>
+              </div>
+              <p class="export-form-note">Subscribes you to The Independent Defender, our twice-monthly newsletter on the enterprise data security market. Unsubscribe at any time.</p>
+              <div id="nl-msg" style="display:none; font-size:11px; margin-top:8px;"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <button class="btn-secondary" id="reset-btn">Start over</button>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>Data Security Posture Management Software is an independent publication. No sponsored content. No affiliate arrangements. Vendor coverage is editorially determined.</p>
+      <p>&copy; 2026 Machines &amp; Words. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/newsletter.js"></script>
+
+  <script>
+    // ============================================================
+    // UTILITIES
+    // ============================================================
+    function uid() {
+      return Math.random().toString(36).slice(2, 9);
+    }
+
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ============================================================
+    // DIMENSION DEFINITIONS
+    // ============================================================
+    var DIMS = [
+      {
+        id: 'sensitivity',
+        label: 'Data sensitivity',
+        abbr: 'S',
+        tip: 'Classification level of the majority of data in this store',
+        options: [
+          { score: 5, label: 'Regulated personal data (PII, PHI, PCI)' },
+          { score: 4, label: 'Financial or intellectual property' },
+          { score: 3, label: 'Internal confidential' },
+          { score: 2, label: 'Internal general or unclassified' },
+          { score: 1, label: 'Non-sensitive or public' }
+        ]
+      },
+      {
+        id: 'exposure',
+        label: 'Access exposure',
+        abbr: 'E',
+        tip: 'Breadth of principals who can reach this store',
+        options: [
+          { score: 5, label: 'Public or internet-exposed' },
+          { score: 4, label: 'Cross-account or external principals' },
+          { score: 3, label: 'Broad internal (many teams, open IAM policy)' },
+          { score: 2, label: 'Restricted to named roles or groups' },
+          { score: 1, label: 'Tightly controlled, audited access' }
+        ]
+      },
+      {
+        id: 'criticality',
+        label: 'Store criticality',
+        abbr: 'C',
+        tip: 'Operational role of this data store in your environment',
+        options: [
+          { score: 5, label: 'Production' },
+          { score: 4, label: 'Customer-facing staging' },
+          { score: 3, label: 'Internal staging or pre-production' },
+          { score: 2, label: 'Development or test' },
+          { score: 1, label: 'Archive or cold storage' }
+        ]
+      },
+      {
+        id: 'age',
+        label: 'Finding age',
+        abbr: 'A',
+        tip: 'How long ago this finding was surfaced or last verified',
+        options: [
+          { score: 5, label: 'Never scanned or finding unverified' },
+          { score: 4, label: '90 or more days old' },
+          { score: 3, label: '30 to 90 days old' },
+          { score: 2, label: '7 to 30 days old' },
+          { score: 1, label: 'Less than 7 days old' }
+        ]
+      },
+      {
+        id: 'downstream',
+        label: 'Downstream dependencies',
+        abbr: 'D',
+        tip: 'Number of systems that consume data from this store',
+        options: [
+          { score: 5, label: '5 or more downstream systems' },
+          { score: 4, label: '3 to 4 systems, or count unknown' },
+          { score: 3, label: '1 to 2 downstream systems' },
+          { score: 1, label: 'No downstream dependencies' }
+        ]
+      }
+    ];
+
+    // ============================================================
+    // SCORING & CLASSIFICATION
+    // ============================================================
+    function totalScore(f) {
+      return f.sensitivity + f.exposure + f.criticality + f.age + f.downstream;
+    }
+
+    function getTier(total) {
+      if (total >= 21) return { label: 'P1', cls: 'tier-p1' };
+      if (total >= 16) return { label: 'P2', cls: 'tier-p2' };
+      if (total >= 11) return { label: 'P3', cls: 'tier-p3' };
+      return { label: 'P4', cls: 'tier-p4' };
+    }
+
+    function buildRationale(f) {
+      var parts = [];
+
+      if (f.sensitivity === 5) parts.push('contains regulated personal data');
+      else if (f.sensitivity === 4) parts.push('contains financial or IP data');
+
+      if (f.exposure === 5) parts.push('exposed to the public internet');
+      else if (f.exposure === 4) parts.push('accessible to external or cross-account principals');
+
+      if (f.criticality === 5) parts.push('production system');
+      else if (f.criticality === 4) parts.push('customer-facing staging environment');
+
+      if (f.age === 5) parts.push('no scan history');
+      else if (f.age === 4) parts.push('finding is 90 or more days old');
+
+      if (f.downstream === 5) parts.push('feeds 5 or more downstream systems');
+      else if (f.downstream === 4) parts.push('downstream dependency count unknown or high');
+
+      if (parts.length === 0) {
+        return 'Low composite risk. Monitor and review on the standard schedule.';
+      }
+
+      var first = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+      var rest = parts.slice(1);
+      if (rest.length === 0) return first + '.';
+      return first + ': ' + rest.join(', ') + '.';
+    }
+
+    function breakdown(f) {
+      return DIMS.map(function(d) { return d.abbr + ':' + f[d.id]; }).join('  ');
+    }
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    var findings = [];
+    var exportUnlocked = false;
+
+    function loadState() {
+      try {
+        var saved = localStorage.getItem('dspm-matrix-v1');
+        if (saved) findings = JSON.parse(saved);
+        exportUnlocked = localStorage.getItem('dspm-matrix-unlocked') === '1';
+      } catch(e) {}
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('dspm-matrix-v1', JSON.stringify(findings));
+      } catch(e) {}
+    }
+
+    // ============================================================
+    // RENDER: DIMENSION FORM FIELDS
+    // ============================================================
+    function renderDimFields() {
+      var grid = document.getElementById('dim-grid');
+      grid.innerHTML = '';
+
+      DIMS.forEach(function(dim) {
+        var field = document.createElement('div');
+        field.className = 'form-field';
+
+        var label = document.createElement('label');
+        label.setAttribute('for', 'dim-' + dim.id);
+        label.textContent = dim.label;
+
+        var tip = document.createElement('span');
+        tip.className = 'field-tip';
+        tip.textContent = dim.tip;
+
+        var sel = document.createElement('select');
+        sel.id = 'dim-' + dim.id;
+
+        var ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = 'Select...';
+        ph.disabled = true;
+        ph.selected = true;
+        sel.appendChild(ph);
+
+        dim.options.forEach(function(opt) {
+          var o = document.createElement('option');
+          o.value = opt.score;
+          o.textContent = opt.score + ' - ' + opt.label;
+          sel.appendChild(o);
+        });
+
+        field.appendChild(label);
+        field.appendChild(tip);
+        field.appendChild(sel);
+        grid.appendChild(field);
+      });
+    }
+
+    // ============================================================
+    // RENDER: QUEUE
+    // ============================================================
+    function renderQueue() {
+      var block = document.getElementById('queue-block');
+      var list = document.getElementById('queue-list');
+      var countEl = document.getElementById('queue-count');
+
+      if (findings.length === 0) {
+        block.style.display = 'none';
+        return;
+      }
+
+      block.style.display = '';
+      countEl.textContent = '(' + findings.length + ')';
+      list.innerHTML = '';
+
+      findings.forEach(function(f) {
+        var li = document.createElement('li');
+        li.className = 'queue-item';
+
+        var nameEl = document.createElement('span');
+        nameEl.className = 'queue-item-name';
+        nameEl.textContent = f.name;
+
+        var metaEl = document.createElement('span');
+        metaEl.className = 'queue-item-meta';
+        metaEl.textContent = breakdown(f) + '  (' + totalScore(f) + '/25)';
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'btn-remove';
+        removeBtn.textContent = 'Remove';
+        removeBtn.setAttribute('data-id', f.id);
+        removeBtn.addEventListener('click', function() {
+          findings = findings.filter(function(x) { return x.id !== f.id; });
+          saveState();
+          renderQueue();
+          if (findings.length === 0) {
+            document.getElementById('results-block').style.display = 'none';
+          }
+        });
+
+        li.appendChild(nameEl);
+        li.appendChild(metaEl);
+        li.appendChild(removeBtn);
+        list.appendChild(li);
+      });
+    }
+
+    // ============================================================
+    // RENDER: RESULTS
+    // ============================================================
+    function renderResults() {
+      var block = document.getElementById('results-block');
+      var tbody = document.getElementById('results-body');
+
+      if (findings.length === 0) return;
+
+      var sorted = findings
+        .map(function(f) { return Object.assign({}, f, { total: totalScore(f) }); })
+        .sort(function(a, b) { return b.total - a.total; });
+
+      tbody.innerHTML = '';
+
+      sorted.forEach(function(f, i) {
+        var t = getTier(f.total);
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="td-rank">' + (i + 1) + '</td>' +
+          '<td class="td-name">' + escHtml(f.name) + '</td>' +
+          '<td><span class="tier-badge ' + t.cls + '">' + t.label + '</span></td>' +
+          '<td class="td-score">' + f.total + '/25</td>' +
+          '<td class="td-breakdown">' + breakdown(f) + '</td>' +
+          '<td class="td-rationale">' + escHtml(buildRationale(f)) + '</td>';
+        tbody.appendChild(tr);
+      });
+
+      block.style.display = '';
+
+      if (exportUnlocked) {
+        showExportReady();
+      }
+    }
+
+    // ============================================================
+    // CSV EXPORT
+    // ============================================================
+    function buildCSV() {
+      var sorted = findings
+        .map(function(f) { return Object.assign({}, f, { total: totalScore(f) }); })
+        .sort(function(a, b) { return b.total - a.total; });
+
+      var cols = ['Rank', 'Store', 'Tier', 'Score', 'Sensitivity', 'Exposure', 'Criticality', 'Finding Age', 'Downstream', 'Rationale'];
+
+      var rows = sorted.map(function(f, i) {
+        var t = getTier(f.total);
+        return [
+          i + 1,
+          f.name,
+          t.label,
+          f.total + '/25',
+          f.sensitivity,
+          f.exposure,
+          f.criticality,
+          f.age,
+          f.downstream,
+          buildRationale(f)
+        ].map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',');
+      });
+
+      return [cols.join(',')].concat(rows).join('\r\n');
+    }
+
+    function triggerDownload() {
+      var csv = buildCSV();
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'dspm-prioritization-matrix.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    function showExportReady() {
+      var banner = document.getElementById('export-banner');
+      var formWrap = document.getElementById('export-form-wrap');
+      if (formWrap) formWrap.style.display = 'none';
+      if (banner) {
+        banner.innerHTML =
+          '<p>Matrix ready. <strong>' + findings.length + ' finding' + (findings.length !== 1 ? 's' : '') + '</strong> ranked across four priority tiers.</p>' +
+          '<button class="btn-primary" id="dl-btn">Download CSV</button>';
+        var dlBtn = document.getElementById('dl-btn');
+        if (dlBtn) dlBtn.addEventListener('click', triggerDownload);
+      }
+    }
+
+    // Called by newsletter.js after successful subscribe
+    window._onExportGateSuccess = function() {
+      exportUnlocked = true;
+      try { localStorage.setItem('dspm-matrix-unlocked', '1'); } catch(e) {}
+      showExportReady();
+      triggerDownload();
+    };
+
+    // ============================================================
+    // FORM HELPERS
+    // ============================================================
+    function getFormValues() {
+      var name = document.getElementById('store-name').value.trim();
+      var dims = {};
+      var complete = true;
+
+      DIMS.forEach(function(dim) {
+        var el = document.getElementById('dim-' + dim.id);
+        if (!el || el.value === '') {
+          complete = false;
+        } else {
+          dims[dim.id] = parseInt(el.value, 10);
+        }
+      });
+
+      return { name: name, dims: dims, complete: complete };
+    }
+
+    function clearForm() {
+      document.getElementById('store-name').value = '';
+      DIMS.forEach(function(dim) {
+        var el = document.getElementById('dim-' + dim.id);
+        if (el) el.value = '';
+      });
+      document.getElementById('name-error').style.display = 'none';
+      document.getElementById('dim-error').style.display = 'none';
+    }
+
+    // ============================================================
+    // BOOT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+
+      var EXAMPLES = [
+        { id: uid(), name: 'prod-customer-pii-s3',    sensitivity: 5, exposure: 5, criticality: 5, age: 4, downstream: 4 },
+        { id: uid(), name: 'analytics-redshift-main', sensitivity: 4, exposure: 3, criticality: 5, age: 3, downstream: 3 },
+        { id: uid(), name: 'legacy-archive-blob',     sensitivity: 4, exposure: 2, criticality: 1, age: 5, downstream: 1 },
+        { id: uid(), name: 'staging-postgres-app',    sensitivity: 3, exposure: 4, criticality: 4, age: 2, downstream: 3 },
+        { id: uid(), name: 'dev-test-mongodb',        sensitivity: 2, exposure: 3, criticality: 2, age: 2, downstream: 1 }
+      ];
+
+      loadState();
+      renderDimFields();
+      renderQueue();
+
+      // Add finding
+      document.getElementById('add-btn').addEventListener('click', function() {
+        var fv = getFormValues();
+        var valid = true;
+
+        if (!fv.name) {
+          document.getElementById('name-error').style.display = '';
+          valid = false;
+        } else {
+          document.getElementById('name-error').style.display = 'none';
+        }
+
+        if (!fv.complete) {
+          document.getElementById('dim-error').style.display = '';
+          valid = false;
+        } else {
+          document.getElementById('dim-error').style.display = 'none';
+        }
+
+        if (!valid) return;
+
+        findings.push(Object.assign({ id: uid(), name: fv.name }, fv.dims));
+        saveState();
+        clearForm();
+        renderQueue();
+        document.getElementById('store-name').focus();
+      });
+
+      // Allow Enter key on store name to advance to first select
+      document.getElementById('store-name').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var first = document.getElementById('dim-sensitivity');
+          if (first) first.focus();
+        }
+      });
+
+      // Load examples
+      document.getElementById('example-btn').addEventListener('click', function() {
+        var existingNames = findings.map(function(f) { return f.name; });
+        EXAMPLES.forEach(function(e) {
+          if (existingNames.indexOf(e.name) === -1) {
+            findings.push(Object.assign({}, e, { id: uid() }));
+          }
+        });
+        saveState();
+        renderQueue();
+        document.getElementById('queue-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // Generate matrix
+      document.getElementById('generate-btn').addEventListener('click', function() {
+        renderResults();
+        document.getElementById('results-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // Clear all
+      document.getElementById('clear-btn').addEventListener('click', function() {
+        if (!window.confirm('Remove all findings from the queue?')) return;
+        findings = [];
+        saveState();
+        renderQueue();
+        document.getElementById('results-block').style.display = 'none';
+      });
+
+      // Reset
+      document.getElementById('reset-btn').addEventListener('click', function() {
+        if (!window.confirm('Clear all findings and start over?')) return;
+        findings = [];
+        saveState();
+        renderQueue();
+        document.getElementById('results-block').style.display = 'none';
+        clearForm();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Export CTA: show email gate or download directly if already unlocked
+      document.getElementById('export-cta').addEventListener('click', function() {
+        if (exportUnlocked) {
+          triggerDownload();
+          return;
+        }
+        document.getElementById('export-form-wrap').style.display = '';
+        document.getElementById('nl-email').focus();
+      });
+
+    });
+  </script>
+
+</body>
+</html>

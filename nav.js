@@ -25,8 +25,9 @@
     <div class="nav-section">
       <div class="nav-section-label">Tools</div>
       <a href="/tools/" class="nav-item depth-0">All tools</a>
-      <a href="/tools/vendor-comparison/" class="nav-item depth-1">&#9500; Vendor comparison</a>
-      <a href="/tools/architecture-fit/" class="nav-item depth-1">&#9492; Architecture fit</a>
+      <a href="/tools/architecture-fit/" class="nav-item depth-1">&#9500; Architecture fit</a>
+      <a href="/tools/vendor-comparison/" class="nav-item depth-1">&#9500; Scan-cost architect</a>
+      <a href="/tools/" class="nav-item depth-1">&#9500; more</a>
     </div>
 
     <div class="nav-divider"></div>
@@ -35,7 +36,6 @@
       <div class="nav-section-label">Comparisons</div>
       <a href="/comparisons/" class="nav-item depth-0">All comparisons</a>
       <a href="/comparisons/cyera-vs-varonis/" class="nav-item depth-1">&#9500; Cyera vs. Varonis</a>
-      <a href="/comparisons/bigid-vs-securiti/" class="nav-item depth-1">&#9500; BigID vs. Securiti</a>
       <a href="/comparisons/wiz-dspm-vs-standalone/" class="nav-item depth-1">&#9500; Wiz vs. Standalone</a>
       <a href="/comparisons/" class="nav-item depth-1">&#9492; more</a>
     </div>
@@ -45,8 +45,9 @@
     <div class="nav-section">
       <div class="nav-section-label">Guides</div>
       <a href="/guides/" class="nav-item depth-0">All guides</a>
+            <a href="/guides/hidden-cloud-tax/" class="nav-item depth-1">&#9500; Hidden cloud tax</a>
       <a href="/guides/agentless-vs-agent-based/" class="nav-item depth-1">&#9500; Agentless vs. agent-based</a>
-      <a href="/guides/dspm-poc-evaluation/" class="nav-item depth-1">&#9492; Before a DSPM POC</a>
+      <a href="/guides/" class="nav-item depth-1">&#9492; more</a>
     </div>
 
     <div class="nav-divider"></div>
