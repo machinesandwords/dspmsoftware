@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+  <title>What Is Data Security Posture Management (DSPM)? A Plain Definition</title>
+  <meta name="description" content="A clear, independent definition of data security posture management: what it does, how it differs from CSPM and traditional data governance, and why it exists.">
+  <link rel="canonical" href="https://dspmsoftware.com/guides/what-is-dspm/">
+
+  <meta property="og:title" content="What Is Data Security Posture Management (DSPM)? A Plain Definition">
+  <meta property="og:description" content="A clear, independent definition of data security posture management: what it does, how it differs from CSPM and traditional data governance, and why it exists.">
+  <meta property="og:url" content="https://dspmsoftware.com/guides/what-is-dspm/">
+  <meta property="og:type" content="article">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What Is Data Security Posture Management (DSPM)?",
+    "description": "A clear, independent definition of data security posture management: what it does, how it differs from CSPM and traditional data governance, and why it exists.",
+    "url": "https://dspmsoftware.com/guides/what-is-dspm/",
+    "datePublished": "2026-07-05",
+    "dateModified": "2026-07-05",
+    "publisher": { "@type": "Organization", "name": "DSPM Software", "url": "https://dspmsoftware.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://dspmsoftware.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dspmsoftware.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "What Is DSPM", "item": "https://dspmsoftware.com/guides/what-is-dspm/" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What does DSPM stand for?", "acceptedAnswer": { "@type": "Answer", "text": "Data Security Posture Management. Software that discovers where sensitive data lives, classifies what it is, and assesses how exposed it is across cloud and on-premises environments." } },
+      { "@type": "Question", "name": "Is DSPM the same as data loss prevention (DLP)?", "acceptedAnswer": { "@type": "Answer", "text": "No. DLP monitors and blocks data movement in real time, typically at the network or endpoint. DSPM discovers and assesses where sensitive data lives and how exposed it is, regardless of whether anyone is currently trying to move it." } },
+      { "@type": "Question", "name": "Is DSPM the same as CSPM?", "acceptedAnswer": { "@type": "Answer", "text": "No. CSPM assesses cloud infrastructure configuration \u2014 misconfigurations, compliance drift, identity permissions. DSPM focuses specifically on sensitive data itself: where it lives, what it is, and how exposed it is, independent of whether the underlying infrastructure is configured correctly." } },
+      { "@type": "Question", "name": "Why does DSPM exist as its own category?", "acceptedAnswer": { "@type": "Answer", "text": "Because sensitive data increasingly exists in places nobody catalogued \u2014 forgotten cloud storage, shadow databases, copies made for one-time projects. Traditional data governance relies on data being registered by the people who created it, and DSPM exists because that assumption stopped holding at cloud scale." } }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+  <style>:root{--accent:#2E5CA6;--accent-dim:#1F3F78;--accent-pale:#E6ECF7}</style>
+  <script src="/config.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/" class="topbar-brand">DSPM <span>Software</span></a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-tagline">Independent guidance for DSPM buyers</span>
+    <div class="topbar-right"><a href="/subscribe/">Subscribe &rarr;</a></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Site navigation">
+      <div id="sidebar-nav"></div>
+    </nav>
+
+    <main class="main">
+      <article class="content">
+
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/guides/">Guides</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>What Is DSPM</span>
+        </nav>
+
+        <span class="page-label">Definition</span>
+        <h1>What Is Data Security Posture Management (DSPM)?</h1>
+
+        <p class="lead">Data security posture management is the practice of discovering where sensitive data actually lives, classifying what it is, and assessing how exposed it is &mdash; across cloud storage, SaaS applications, and on-premises systems. Not a one-time audit. An ongoing process, because sensitive data keeps appearing in places nobody planned for it to end up.</p>
+
+        <h2>What DSPM software actually does</h2>
+
+        <p><strong>Discovery</strong> finds data stores across your environment &mdash; cloud storage buckets, databases, SaaS applications, file shares &mdash; including ones that were never registered in any governance catalog. This is the function that matters most in practice, because a meaningful share of sensitive data in most organizations lives in places nobody remembers creating: a forgotten backup, a database spun up for a one-time migration, a spreadsheet export that landed in a shared drive.</p>
+
+        <p><strong>Classification</strong> determines what the discovered data actually is &mdash; personally identifiable information, financial records, credentials, source code, health data &mdash; typically using pattern matching, machine learning, or a combination of both. Classification accuracy is where platforms diverge most in practice: a platform that generates too many false positives on classification gets ignored the same way any noisy security tool does.</p>
+
+        <p><strong>Exposure assessment</strong> evaluates how at-risk the classified data actually is: who can access it, whether it's encrypted, whether it's publicly reachable, whether the access permissions match what the data's sensitivity would warrant. This is the step that turns "we found sensitive data" into "here's what's actually dangerous about where it's sitting."</p>
+
+        <h2>Why this exists as a separate category</h2>
+
+        <p>Traditional data governance assumed data got catalogued by the people who created it &mdash; a database gets registered, a data owner gets assigned, a classification gets applied at creation time. That assumption held reasonably well when data lived in a manageable number of systems that IT provisioned centrally. It stopped holding once cloud infrastructure let any team spin up a storage bucket or database in minutes, with no central provisioning step forcing anyone to register what they created.</p>
+
+        <p>DSPM exists because that gap between what's catalogued and what actually exists became large enough to be a real security problem. The forgotten S3 bucket from a project that ended two years ago doesn't show up in any data governance system, because nobody ever entered it into one. It shows up in a DSPM platform's discovery scan, because the platform looks at what actually exists rather than what was declared.</p>
+
+        <h2>What DSPM isn't</h2>
+
+        <p>DSPM is not CSPM (Cloud Security Posture Management). CSPM assesses cloud infrastructure configuration &mdash; misconfigured security groups, excessive IAM permissions, compliance drift against a framework like CIS or NIST. DSPM focuses specifically on the data itself, independent of whether the infrastructure hosting it is configured correctly. A cloud environment can be perfectly configured by CSPM standards and still have sensitive data sitting somewhere it shouldn't be, exposed to more people than it should be. The two categories are complementary and increasingly bundled together under broader CNAPP platforms, but they answer different questions.</p>
+
+        <p>DSPM is also not data loss prevention (DLP). DLP monitors and blocks data movement in real time &mdash; stopping a file from being emailed out, blocking a USB transfer, flagging an upload to an unsanctioned cloud service. DSPM doesn't watch data in motion; it assesses where data sits and how exposed it is at rest. Some agent-based DSPM platforms add real-time behavioral monitoring closer to DLP territory, but the core discipline is about posture and exposure, not blocking active data movement.</p>
+
+        <h2>Where to go from here</h2>
+
+        <p>If you're evaluating whether to bring in a DSPM platform, the first real decision is architectural: agentless versus agent-based, which determines coverage and deployment speed before any feature comparison matters. The <a href="/guides/dspm-software/">full buyer's guide</a> covers that decision along with evaluation criteria and named platform comparisons. For the deeper architectural breakdown specifically, see <a href="/guides/agentless-vs-agent-based/">agentless vs. agent-based DSPM</a>.</p>
+
+        <h2>FAQ</h2>
+
+        <h3>What does DSPM stand for?</h3>
+        <p>Data Security Posture Management. Software that discovers where sensitive data lives, classifies what it is, and assesses how exposed it is across cloud and on-premises environments.</p>
+
+        <h3>Is DSPM the same as data loss prevention (DLP)?</h3>
+        <p>No. DLP monitors and blocks data movement in real time, typically at the network or endpoint. DSPM discovers and assesses where sensitive data lives and how exposed it is, regardless of whether anyone is currently trying to move it.</p>
+
+        <h3>Is DSPM the same as CSPM?</h3>
+        <p>No. CSPM assesses cloud infrastructure configuration &mdash; misconfigurations, compliance drift, identity permissions. DSPM focuses specifically on sensitive data itself: where it lives, what it is, and how exposed it is, independent of whether the underlying infrastructure is configured correctly.</p>
+
+        <h3>Why does DSPM exist as its own category?</h3>
+        <p>Because sensitive data increasingly exists in places nobody catalogued &mdash; forgotten cloud storage, shadow databases, copies made for one-time projects. Traditional data governance relies on data being registered by the people who created it, and DSPM exists because that assumption stopped holding at cloud scale.</p>
+
+        <hr>
+        <p><em>This site has no vendor relationships, no sponsored content, and no affiliate arrangements with the platforms it covers. When this page has an opinion, it says so. When the evidence is thin, it says that too.</em></p>
+
+        <p style="font-size:var(--small); margin-top:24px;">Related: <a href="/guides/dspm-software/">DSPM Software: An Independent Buyer's Guide</a> &nbsp;&middot;&nbsp; <a href="/guides/agentless-vs-agent-based/">Agentless vs. Agent-Based DSPM</a> &nbsp;&middot;&nbsp; <a href="/landscape/">DSPM market landscape</a></p>
+
+        <!-- Newsletter -->
+        <div class="newsletter-block">
+          <span class="page-label">Stay current</span>
+          <p>The Fallout covers the cybersecurity market the way your vendors hope you won't. Analysis for CISOs, enterprise architects, and security operations leaders.</p>
+          <div class="newsletter-form">
+            <a href="https://thefallout.news/subscribe?utm_source=dspmsoftware&utm_medium=authority_site&utm_campaign=newsletter_block" id="nl-subscribe-link" class="newsletter-button">Subscribe free</a>
+          </div>
+        </div>
+
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="page-label">DSPM Software</span>
+      <p>An independent publication. Built by <a href="https://machinesandwords.com">Machines &amp; Words</a>.</p>
+    </div>
+  </footer>
+
+  <script src="/nav.js"></script>
+  <script src="/newsletter.js"></script>
+</body>
+</html>

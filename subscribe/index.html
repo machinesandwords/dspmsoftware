@@ -7,13 +7,13 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
 
-  <title>Subscribe to The Independent Defender | DSPM Software</title>
-  <meta name="description" content="The Independent Defender covers the DSPM and enterprise data security market. Vendor-neutral analysis, no sales motives. Twice monthly. Free to subscribe.">
-  <link rel="canonical" href="https://dspmsoftware.com/subscribe/">
+  <title>Subscribe to The Independent Fallout | DSPM Software</title>
+  <meta name="description" content="The Fallout covers cybersecurity market intelligence for enterprise software buyers. Vendor-neutral analysis, no sales motives.">
+  <link rel="canonical" href="https://thefalloutnews.substack.com/">
 
-  <meta property="og:title" content="Subscribe to The Independent Defender | DSPM Software">
-  <meta property="og:description" content="Vendor-neutral coverage of the DSPM and data security market. Twice monthly. Free.">
-  <meta property="og:url" content="https://dspmsoftware.com/subscribe/">
+  <meta property="og:title" content="Subscribe to The Fallout | Cybersecurity Market Intelligence for Enterprise Software Buyers">
+  <meta property="og:description" content="Vendor-neutral cybersecurity market intelligence for enterprise software buyers.">
+  <meta property="og:url" content="https://thefalloutnews.substack.com/">
   <meta property="og:type" content="website">
 
   <script type="application/ld+json">
@@ -41,8 +41,8 @@
  
     <header class="page-header">
       <p class="overline">Newsletter</p>
-      <h1>The Independent Defender</h1>
-      <p class="lede">Covers the DSPM and enterprise data security market the way your vendors hope you won't.</p>
+      <h1>The Fallout</h1>
+      <p class="lede">Covers the cybersecurity market free of vendor bias.</p>
     </header>
  
     <section class="content-section">
@@ -54,74 +54,20 @@
  
       <p>A vendor says it solves your problem. But is that a core feature or a bolt-on built to capture market share? Bolt-ons get deprioritized, under-supported, and quietly sunset. You could be back where you started in 18 months.</p>
  
-      <p>The Independent Defender covers these decisions biweekly, without vendor relationships or advertiser obligations.</p>
+      <p>The Fallout covers these decisions without vendor relationships or advertiser obligations.</p>
     </section>
  
-    <div class="newsletter-block">
-      <p class="nl-headline">Subscribe free</p>
-      <p class="nl-subhead">Twice monthly. Free. No vendor relationships. No advertiser obligations.</p>
-      <div class="nl-form-row">
-        <input type="email" id="nl-email" placeholder="you@company.com" autocomplete="email">
-        <button id="nl-submit">Subscribe</button>
+       <div class="newsletter-block">
+      <span class="page-label">Stay current</span>
+      <p>The Fallout covers the cybersecurity market the way your vendors hope you won't. Analysis for CISOs, enterprise architects, and security operations leaders.</p>
+      <div class="newsletter-form">
+        <a href="https://thefallout.news/?utm_source=thefallout&utm_medium=authority_site&utm_campaign=newsletter_block" id="nl-subscribe-link" class="newsletter-button">Subscribe free</a>
       </div>
-      <span id="nl-msg"></span>
     </div>
  
-    <section class="content-section">
-      <p>The Independent Defender also covers the broader Defender family: attack surface management, non-human identity, just-in-time access, and adjacent enterprise security categories. One list, one frequency.</p>
-    </section>
+
  
   </main>
  
-  <script src="/config.js"></script>
-  <script src="/nav.js"></script>
-  <script>
-    const WORKER_URL = 'https://newsletter-dspmsoftware.whereismy328.workers.dev/subscribe';
-    const GROUP_ID = '189858273326793780';
- 
-    const emailInput = document.getElementById('nl-email');
-    const submitBtn = document.getElementById('nl-submit');
-    const msg = document.getElementById('nl-msg');
- 
-    submitBtn.addEventListener('click', async () => {
-      const email = emailInput.value.trim();
-      msg.style.display = 'block';
- 
-      if (!email || !email.includes('@')) {
-        msg.textContent = 'Please enter a valid email address.';
-        return;
-      }
- 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Subscribing...';
-      msg.textContent = '';
- 
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, group_id: GROUP_ID })
-        });
-        const data = await res.json();
-        if (data.success) {
-          msg.textContent = 'You\'re on the list.';
-          msg.classList.add('nl-success');
-          emailInput.value = '';
-        } else {
-          msg.textContent = 'Something went wrong. Try again.';
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Subscribe';
-        }
-      } catch (e) {
-        msg.textContent = 'Something went wrong. Try again.';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Subscribe';
-      }
-    });
- 
-    emailInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') submitBtn.click();
-    });
-  </script>
 </body>
 </html>

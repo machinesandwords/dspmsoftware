@@ -6,7 +6,7 @@ An independent buyer's guide to data security posture management software. Vendo
 
 - [Home](https://dspmsoftware.com/): Overview of the DSPM market and guide to independent vendor analysis, evaluation frameworks, and market coverage on this site.
 - [Why DSPM](https://dspmsoftware.com/why/): The case for treating unclassified data as untrustworthy data, and why classification is the prerequisite for every downstream data security control.
-- [Subscribe](https://dspmsoftware.com/subscribe/): Subscribe to The Independent Defender, a twice-monthly vendor-neutral newsletter covering the DSPM and enterprise data security market.
+- [Subscribe](https://dspmsoftware.com/subscribe/): Subscribe to The Fallout, vendor-neutral cybersecurity intelligence for enterprise software buyers.
 - [DSPM Market Landscape](https://dspmsoftware.com/landscape/): How the DSPM market is structured — vendor categories, execution model differences, and architectural fault lines that determine platform fit.
 - [Vendor Index](https://dspmsoftware.com/landscape/vendor-index/): Every significant DSPM platform organized by architectural category: cloud-native pure-plays, CNAPP-integrated, legacy data security, hyper-scale cloud, and outliers.
 - [Market Direction](https://dspmsoftware.com/landscape/market-direction/): Where the DSPM category is heading — identity correlation, real-time detection, AI pipeline coverage, and what those shifts mean for a purchase made today.
