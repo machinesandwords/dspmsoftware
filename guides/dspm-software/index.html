@@ -109,8 +109,7 @@
 
         <h2>Evaluation criteria that actually separate platforms</h2>
 
-        <p><strong>Discovery breadth</strong> &mdash; does the platform find shadow data (the forgotten S3 bucket, the orphaned database) or only what's already registered in a governance catalog? Agentless platforms have a structural advantage here for cloud environments specifically, since they can enumerate everything an API surfaces regardless of whether it's catalogued.</p>
-
+<p><strong>Discovery breadth</strong> &mdash; does the platform find shadow data (the forgotten S3 bucket, the orphaned database) or only what's already registered in a governance catalog? Agentless platforms have a structural advantage here for cloud environments specifically, since they can enumerate everything an API surfaces regardless of whether it's catalogued. Enumeration isn't the whole problem, though: a bucket can be discovered, correctly scoped in its own account, and still be reachable through <a href="https://thefalloutnews.substack.com/p/the-cross-account-blindspot?utm_source=dspmsoftware&utm_medium=editorial&utm_campaign=cross_account_blindspot">a cross-account role assumption chain</a> that never appears in the owning account's logs &mdash; the exposure most evaluations never test for.</p>
         <p><strong>Classification accuracy</strong> &mdash; false positives in sensitive-data classification erode trust in the platform fast, the same way false positives erode trust in any security tool. Ask for classification accuracy against your actual sample data, not the vendor's demo dataset.</p>
 
         <p><strong>Consolidation risk</strong> &mdash; DSPM consolidated faster than most security categories. Some platforms you're evaluating may look materially different in eighteen months if they get absorbed into a broader CNAPP suite. Whether a DSPM feature inside a larger platform gets continued investment post-acquisition is a legitimate, underweighted evaluation criterion.</p>
