@@ -26,7 +26,7 @@
       <div class="nav-section-label">Tools</div>
       <a href="/tools/" class="nav-item depth-0">All tools</a>
       <a href="/tools/architecture-fit/" class="nav-item depth-1">&#9500; Architecture fit</a>
-      <a href="/tools/vendor-comparison/" class="nav-item depth-1">&#9500; Scan-cost architect</a>
+      <a href="/tools/scan-cost-architect/" class="nav-item depth-1">&#9500; Scan-cost architect</a>
       <a href="/tools/" class="nav-item depth-1">&#9500; more</a>
     </div>
 
